@@ -1,17 +1,17 @@
 package ui;
 
 import model.DailyLog;
-import model.DailyLogList;
 import model.ExerciseEntry;
 import model.LogVector;
 
 import java.io.Serializable;
 import java.time.LocalDate;
 import java.util.Scanner;
+import java.util.concurrent.ConcurrentSkipListMap;
 
 public class RecoveryTraceApp implements Serializable {
     private DailyLog dailyLog;
-    private DailyLogList historicalLog;
+    private ConcurrentSkipListMap<LocalDate, DailyLog> historicalLog;
     private Scanner input;
 
 
@@ -25,7 +25,7 @@ public class RecoveryTraceApp implements Serializable {
     // REFERENCE: code structured around TellerApp example, some code copied verbatim
     private void runRecoveryTrace() {
         boolean keepGoing = true;
-        String command = null;
+        String command;
 
         initialize();
 
@@ -47,18 +47,25 @@ public class RecoveryTraceApp implements Serializable {
     // EFFECTS: processes user command
     // REFERENCE: code structured around TellerApp example, some code copied verbatim
     private void processCommand(String command) {
-        if (command.equals("d")) {
-            checkDate();
-        } else if (command.equals("a")) {
-            addExerciseEntry();
-        } else if (command.equals("t")) {
-            totalExerciseOn();
-        } else if (command.equals("p")) {
-            displayExercises();
-        } else if (command.equals("r")) {
-            removeExercise();
-        } else {
-            System.out.println("Selection not valid");
+        switch (command) {
+            case "d":
+                checkDate();
+                break;
+            case "a":
+                addExerciseEntry();
+                break;
+            case "t":
+                totalExerciseOn();
+                break;
+            case "p":
+                displayExercises();
+                break;
+            case "r":
+                removeExercise();
+                break;
+            default:
+                System.out.println("Selection not valid");
+                break;
         }
 
     }
@@ -79,13 +86,13 @@ public class RecoveryTraceApp implements Serializable {
         ExerciseEntry exerciseEntry;
         LogVector exercisesLog = dailyLog.getExerciseLog();
 
-        for (int i = 0; i < exercisesLog.size(); i++) {
-            exerciseEntry = (ExerciseEntry) exercisesLog.get(i);
+        for (model.LogEntry logEntry : exercisesLog) {
+            exerciseEntry = (ExerciseEntry) logEntry;
             System.out.printf("\nentryId %d, Exercise Type: %s, Exercise Intensity: %d, Exercise duration: %d",
-                    exerciseEntry.getEntryId(),exerciseEntry.getExerciseType(), exerciseEntry.getIntensity(),
+                    exerciseEntry.getEntryId(), exerciseEntry.getExerciseType(), exerciseEntry.getIntensity(),
                     exerciseEntry.getDuration());
         }
-        System.out.println("");
+        System.out.print("\n");
     }
 
     // MODIFIES: this
@@ -146,7 +153,7 @@ public class RecoveryTraceApp implements Serializable {
     // EFFECTS: initializes dailyLog by creating new ones if it is a new day
     private void initialize() {
         dailyLog = new DailyLog(LocalDate.now());
-        historicalLog = new DailyLogList();
+        historicalLog = new ConcurrentSkipListMap<>();
         input = new Scanner(System.in);
     }
 

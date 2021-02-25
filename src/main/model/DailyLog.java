@@ -25,9 +25,17 @@ public class DailyLog {
 
 
     // MODIFIES:    this
-    // EFFECT:      adds new ExerciseEntry to logExercises
+    // EFFECT:      adds new ExerciseEntry to exercisesLog
     public void logNew(ExerciseEntry newExercise) {
         this.exercisesLog.add(newExercise);
+    }
+
+    // MODIFIES: this
+    // EFFECT: adds all ExerciseEntries from newEntries vector to exercisesLog
+    public void logNew(LogVector newEntries) {
+        for (LogEntry ee : newEntries) {
+            logNew((ExerciseEntry) ee);
+        }
     }
 
     // MODIFIES: this
@@ -43,11 +51,9 @@ public class DailyLog {
 
     // EFFECT: returns how many minutes of exercise contained in dailyLog
     public int dailyExerciseTotal() {
-        ExerciseEntry exerciseEntry;
         int totalExercise = 0;
-        for (int i = 0; i < exercisesLog.size(); i++) {
-            exerciseEntry = (ExerciseEntry) exercisesLog.get(i);
-            totalExercise += exerciseEntry.getDuration();
+        for (LogEntry logEntry : exercisesLog) {
+            totalExercise += ((ExerciseEntry)logEntry).getDuration();
         }
         return totalExercise;
     }

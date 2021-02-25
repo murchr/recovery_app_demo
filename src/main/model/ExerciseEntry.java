@@ -1,7 +1,5 @@
 package model;
 
-import com.sun.org.apache.xpath.internal.objects.XString;
-
 import java.time.LocalTime;
 
 public class ExerciseEntry extends LogEntry {
@@ -54,7 +52,7 @@ public class ExerciseEntry extends LogEntry {
         this.intensity = intensity;
     }
 
-    // REQUIRES:    duration is a positive integer [1, inf]
+    // REQUIRES:    duration is a positive, non-zero integer [1, inf]
     // Effects:     sets duration
     public void setDuration(int duration) {
         this.duration = duration;

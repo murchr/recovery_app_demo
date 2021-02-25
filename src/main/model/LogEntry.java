@@ -3,9 +3,9 @@ package model;
 import java.time.LocalTime;
 import java.util.Comparator;
 
-public class LogEntry implements Comparator<LocalTime> {
+public abstract class LogEntry implements Comparator<LocalTime> {
     private LocalTime entryTime;
-    private int entryId;
+    private final int entryId;
 
     // EFFECTS:     Constructor sets time of entry to now
     public LogEntry(int entryId) {
