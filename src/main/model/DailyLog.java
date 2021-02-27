@@ -45,20 +45,50 @@ public class DailyLog {
     }
 
     // EFFECT:  returns exercise log from DailyLog
+    // NOTE - passed by refrence. should create new instance of LogVector?
     public LogVector getExerciseLog() {
         return this.exercisesLog;
     }
 
     // EFFECT: returns how many minutes of exercise contained in dailyLog
     public int dailyExerciseTotal() {
-        int totalExercise = 0;
-        for (LogEntry logEntry : exercisesLog) {
-            totalExercise += ((ExerciseEntry)logEntry).getDuration();
-        }
-        return totalExercise;
+        return weightedDailyExerciseScore(0,1);
     }
-
-
+    
+    // EFFECT: returns a daily score for exercise quantity and quality
+    public int dailyExerciseScore() {
+        return weightedDailyExerciseScore(1,1);
+    }
+    
+    // EFFECT: returns a weighted exercise score based on scaling equation
+    private int weightedDailyExerciseScore(int scaleType, int scalor) {
+        int totalScore = 0;
+        for (LogEntry logEntry : exercisesLog) {
+            totalScore += scalingEquation((ExerciseEntry)logEntry, scaleType, scalor);
+        }
+        return totalScore;
+    }
+    
+    // REQUIRES: scaleType must be {0,1,2}
+    // EFFECT: returns an exercise score based on duration and intensity, based on equation selected
+    //                    ScaleType: 0 - duration
+    //                               1 - durtaion*intensity*scalor
+    //                               2 - duration*scalor*intensity^scalor
+    private int scalingEquation(ExerciseLog exerciseLog, int scaleType, int scalor) {
+        int duration = exerciseLog.getDuration();
+        int intensity = exerciseLog.getIntensity();
+        switch(scaleType) {
+            case 0:
+                return duration;
+                break;
+            case 1:
+                return duration * intensity * scalor;
+                break;
+            case 2:
+                return duration * scalor * Math.pow(intensity, scalor);
+                break;                
+        }
+    }
 }
 
 // REQUIRES: n/a
