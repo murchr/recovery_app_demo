@@ -1,0 +1,41 @@
+{
+    "DailyLogMap": {
+        "DailyLogMap": "placeholder",
+        "dailyLog": {
+            "date": {
+                "month": 3,
+                "year": 2021,
+                "day": 2
+            },
+            "exerciseLog": {"LogVector": [{
+                "intensity": 7,
+                "duration": 25,
+                "entryTime": {
+                    "hour": 15,
+                    "minute": 8
+                },
+                "exerciseType": "run",
+                "entryId": 1
+            }]},
+            "weightLog": {"LogVector": []}
+        }
+    },
+    "DailyLog": {
+        "date": {
+            "month": 3,
+            "year": 2018,
+            "day": 1
+        },
+        "exerciseLog": {"LogVector": [{
+            "intensity": 10,
+            "duration": 10,
+            "entryTime": {
+                "hour": 15,
+                "minute": 10
+            },
+            "exerciseType": "sprint",
+            "entryId": 1
+        }]},
+        "weightLog": {"LogVector": []}
+    }
+}

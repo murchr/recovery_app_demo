@@ -1,5 +1,8 @@
 package model;
 
+import exceptions.OutOfRange;
+import model.entries.ExerciseEntry;
+import model.statistics.ExerciseStat;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -12,22 +15,33 @@ class DailyLogTest {
     private DailyLog testDailyLog;
     private DailyLog testDailyLogFull;
     private LogVector lv;
-    private final ExerciseEntry e1 = new ExerciseEntry(1, LocalTime.of(12,30), "exercise 1", 5,30);
-    private final ExerciseEntry e2 = new ExerciseEntry(2, LocalTime.of(12,30), "exercise 2", 10,15);
-    private final ExerciseEntry e3 = new ExerciseEntry(3, LocalTime.of(14,0), "exercise 3", 1,60);
-    private final ExerciseEntry e4 = new ExerciseEntry(4, LocalTime.of(17,10), "exercise 4", 5,15);
-    private final ExerciseEntry e5 = new ExerciseEntry(5, LocalTime.of(7,30), "exercise 5", 5,90);
+    private ExerciseEntry e1;
+    private ExerciseEntry e2;
+    private ExerciseEntry e3;
+    private ExerciseEntry e4;
+    private ExerciseEntry e5;
 
 
     @BeforeEach
     void runBefore() {
+        try {
+            e1 = new ExerciseEntry(1, LocalTime.of(12,30), "exercise 1", 5,30);
+            e2 = new ExerciseEntry(2, LocalTime.of(12,30), "exercise 2", 10,15);
+            e3 = new ExerciseEntry(3, LocalTime.of(14,0), "exercise 3", 1,60);
+            e4 = new ExerciseEntry(4, LocalTime.of(17,10), "exercise 4", 5,15);
+            e5 = new ExerciseEntry(5, LocalTime.of(7,30), "exercise 5", 5,90);
+        } catch (OutOfRange e) {
+            // all inputs valid
+        }
+
+
         testDailyLog = new DailyLog(LocalDate.parse("2021-02-22"));
         testDailyLogFull = new DailyLog(LocalDate.parse("2021-02-23"));
-        testDailyLogFull.logNew(e1);
-        testDailyLogFull.logNew(e2);
-        testDailyLogFull.logNew(e3);
-        testDailyLogFull.logNew(e4);
-        testDailyLogFull.logNew(e5);
+        testDailyLogFull.logNewExercise(e1);
+        testDailyLogFull.logNewExercise(e2);
+        testDailyLogFull.logNewExercise(e3);
+        testDailyLogFull.logNewExercise(e4);
+        testDailyLogFull.logNewExercise(e5);
         lv = new LogVector();
     }
 
@@ -45,7 +59,7 @@ class DailyLogTest {
 
     @Test
     void testLogNew() {
-        testDailyLog.logNew(e1);
+        testDailyLog.logNewExercise(e1);
         lv.add(e1);
         assertEquals(lv, testDailyLog.getExerciseLog());
     }
@@ -53,38 +67,56 @@ class DailyLogTest {
     @Test
     void testMultipleLogNew() {
         ExerciseEntry ee;
-        for(int i = 0; i < 5; i++) {
-            ee = new ExerciseEntry(i+1,LocalTime.of(12,0),"e",5,30);
-            testDailyLog.logNew(ee);
-            lv.add(ee);
+        try {
+            for (int i = 0; i < 5; i++) {
+                ee = new ExerciseEntry(i + 1, LocalTime.of(12, 0), "e", 5, 30);
+                testDailyLog.logNewExercise(ee);
+                lv.add(ee);
+            }
+            assertEquals(lv, testDailyLog.getExerciseLog());
+        } catch (OutOfRange e) {
+            // all inputs valid
         }
-        assertEquals(lv,testDailyLog.getExerciseLog());
     }
 
     @Test
     void testVectorLogNew() {
         ExerciseEntry ee;
-        for(int i = 0; i < 5; i++) {
-            ee = new ExerciseEntry(i+1,LocalTime.of(12,0),"e",5,30);
-            lv.add(ee);
+        try {
+            for (int i = 0; i < 5; i++) {
+                ee = new ExerciseEntry(i + 1, LocalTime.of(12, 0), "e", 5, 30);
+                lv.add(ee);
+            }
+            testDailyLog.logNewExercise(lv);
+            assertEquals(lv, testDailyLog.getExerciseLog());
+        } catch (OutOfRange e) {
+            // all inputs valid
         }
-        testDailyLog.logNew(lv);
-        assertEquals(lv,testDailyLog.getExerciseLog());
     }
 
     @Test
     void testEmptyVectorLogNew() {
-        testDailyLog.logNew(lv);
+        testDailyLog.logNewExercise(lv);
         assertEquals(lv,testDailyLog.getExerciseLog());
     }
-
-
 
     @Test
     void testDailyExerciseTotal() {
         assertEquals(0, testDailyLog.dailyExerciseTotal());
         assertEquals(e1.getDuration()+e2.getDuration()+e3.getDuration()+e4.getDuration()+e5.getDuration(),
                 testDailyLogFull.dailyExerciseTotal());
+    }
+
+    @Test
+    void testDailyExerciseScore() {
+        ExerciseStat exerciseStat = new ExerciseStat();
+        double scalar = exerciseStat.SCORE_SCALAR;
+        assertEquals(0, testDailyLog.dailyExerciseScore());
+        assertEquals((e1.getDuration() * e1.getIntensity() + e2.getDuration() *  e2.getIntensity() +
+                        e3.getDuration() * e3.getIntensity() + e4.getDuration() * e4.getIntensity() +
+                        e5.getDuration() * e5.getIntensity()) * scalar, testDailyLogFull.dailyExerciseScore());
+        testDailyLog.logNewExercise(e1);
+        assertEquals((int)(scalar * e1.getDuration() * Math.pow(e1.getIntensity(), scalar)), testDailyLog.dailyExerciseScore(2));
     }
 
     @Test

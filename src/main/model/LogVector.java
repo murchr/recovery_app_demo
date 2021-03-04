@@ -1,8 +1,14 @@
 package model;
 
+import model.entries.LogEntry;
+import model.statistics.SummaryStat;
+import org.json.JSONArray;
+import org.json.JSONObject;
+import persistence.Writable;
+
 import java.util.Vector;
 
-public class LogVector extends Vector<LogEntry> {
+public class LogVector extends Vector<LogEntry> implements Writable {
 
     public LogVector() {
         super();
@@ -32,5 +38,26 @@ public class LogVector extends Vector<LogEntry> {
         } else {
             return null;
         }
+    }
+
+    // MODIFIES: summaryStat
+    // EFFECTS: applies process method to each element in vector with summaryStat
+    public void summary(SummaryStat summaryStat) {
+        forEach(logEntry -> summaryStat.store(logEntry));
+    }
+
+    // MODIFIES: summaryStat
+    // EFFECTS: applies process method to each element in vector with summaryStat
+    public void summary(SummaryStat summaryStat, int storeType) {
+        forEach(logEntry -> summaryStat.store(logEntry, storeType));
+    }
+
+    @Override
+    public JSONObject toJson() {
+        JSONObject json = new JSONObject();
+        JSONArray jsonArray = new JSONArray();
+        forEach(logEntry -> jsonArray.put(logEntry.toJson()));
+        json.put("LogVector", jsonArray);
+        return json;
     }
 }

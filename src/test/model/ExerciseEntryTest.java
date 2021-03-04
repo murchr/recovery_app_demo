@@ -1,5 +1,7 @@
 package model;
 
+import exceptions.OutOfRange;
+import model.entries.ExerciseEntry;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -17,9 +19,13 @@ public class ExerciseEntryTest {
     LocalTime t3 = LocalTime.parse("13:30");
     @BeforeEach
     public void runBefore() {
-        e1 = new ExerciseEntry(001, t1,"exercise1",1,1);
-        e2 = new ExerciseEntry(002, t2, "exercise2",5,30);
-        e3 = new ExerciseEntry(003, t3, "exercise3",10,60);
+        try {
+            e1 = new ExerciseEntry(1, t1, "exercise1", 1, 1);
+            e2 = new ExerciseEntry(2, t2, "exercise2", 5, 30);
+            e3 = new ExerciseEntry(3, t3, "exercise3", 10, 60);
+        } catch (OutOfRange e) {
+            // all inputs valid
+        }
     }
 
     @Test

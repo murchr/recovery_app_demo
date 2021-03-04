@@ -1,5 +1,7 @@
 package model;
 
+import exceptions.OutOfRange;
+import model.entries.ExerciseEntry;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -35,8 +37,8 @@ public class DailyLogMapTest {
         LogVector lv;
         DailyLog dl;
         storedLV = new ConcurrentSkipListMap<>();
-        DLM0 = new DailyLogMap();
-        DLM = new DailyLogMap();
+        DLM0 = new DailyLogMap("default1", startDate);
+        DLM = new DailyLogMap("default2", startDate);
 
         LocalDate day = LocalDate.from(startDate);
         // generates new map of dailyLogs
@@ -44,13 +46,16 @@ public class DailyLogMapTest {
             lv = new LogVector();
             dl = new DailyLog(day);
             // builds daily exerciseLog
-            for(int j = 0; j < workoutsPerDay; j++) {
-                lv.add(new ExerciseEntry(j+1,tSet[j% tSet.length], workoutTypes[j%workoutTypes.length],
-                        dayIntensity[i%dayIntensity.length],dayDuration[i%dayDuration.length]));
+            try {
+                for (int j = 0; j < workoutsPerDay; j++) {
+                    lv.add(new ExerciseEntry(j + 1, tSet[j % tSet.length], workoutTypes[j % workoutTypes.length],
+                            dayIntensity[i % dayIntensity.length], dayDuration[i % dayDuration.length]));
+                }
+                dl.logNewExercise(lv);
+                storedLV.put(dl.getLogDate(), lv);
+            } catch (OutOfRange e) {
+                // all inputs valid
             }
-            dl.logNew(lv);
-            storedLV.put(dl.getLogDate(),lv);
-
             // assigns dailyLog instance to DLM
             DLM.put(dl.getLogDate(),dl);
         }

@@ -1,5 +1,8 @@
 package model;
 
+import exceptions.OutOfRange;
+import model.entries.ExerciseEntry;
+import model.entries.LogEntry;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -12,27 +15,35 @@ public class LogVectorTest {
     LocalTime t1 = LocalTime.parse("00:00");
     LocalTime t2 = LocalTime.parse("12:00");
     LocalTime t3 = LocalTime.parse("13:30");
-    LogEntry e1 = new ExerciseEntry(001, t1,"exercise1",1,1);
-    LogEntry e2 = new ExerciseEntry(002, t2,"exercise2",5,30);
-    LogEntry e3 = new ExerciseEntry(003, t3,"exercise3",10,60);
-    LogEntry e4 = new ExerciseEntry(004, t1,"exercise2",7,13);
-
+    LogEntry e1;
+    LogEntry e2;
+    LogEntry e3;
+    LogEntry e4;
     LogVector v1;
     LogVector v2;
     LogVector v3;
 
     @BeforeEach
     public void runBefore() {
-        v1 = new LogVector();
-        v1.add(e1);
-        v1.add(e2);
-        v1.add(e3);
-        v1.add(e4);
+        try {
+            e1 = new ExerciseEntry(1, t1,"exercise1",1,1);
+            e2 = new ExerciseEntry(2, t2,"exercise2",5,30);
+            e3 = new ExerciseEntry(3, t3,"exercise3",10,60);
+            e4 = new ExerciseEntry(4, t1,"exercise2",7,13);
 
-        v2 = new LogVector();
-        v2.add(e1);
+            v1 = new LogVector();
+            v1.add(e1);
+            v1.add(e2);
+            v1.add(e3);
+            v1.add(e4);
 
-        v3 = new LogVector();
+            v2 = new LogVector();
+            v2.add(e1);
+
+            v3 = new LogVector();
+        } catch (OutOfRange e) {
+            // all inputs valid
+        }
     }
 
     @Test

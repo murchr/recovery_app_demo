@@ -2,15 +2,18 @@ package ui;
 
 import java.io.*;
 
+
 public class Main {
     public static void main(String[] args) {
-        RecoveryTraceApp userApplet = new RecoveryTraceApp();
+        new RecoveryTraceApp();
     }
 }
 
 
 
-// potential data saving for future implementation
+
+
+// potential alternate file storing implementation
 
 /*
     private static final String fileLocation = "./data/savedAppData";
