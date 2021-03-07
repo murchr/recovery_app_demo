@@ -3,8 +3,9 @@ package model;
 import model.entries.ExerciseEntry;
 import model.entries.LogEntry;
 import model.entries.WeightEntry;
-import model.statistics.ExerciseStat;
-import model.statistics.WeightStat;
+import model.vectors.ExerciseList;
+import model.vectors.LogList;
+import model.vectors.WeightList;
 import org.json.JSONObject;
 import persistence.Writable;
 
@@ -12,15 +13,15 @@ import java.time.LocalDate;
 
 public class DailyLog implements Writable {
 
-    private LocalDate logDate;
-    private LogVector exerciseLog;
-    private LogVector weightLog;
+    private final LocalDate logDate;
+    private final ExerciseList exerciseLog;
+    private final WeightList weightLog;
 
     // EFFECT:  logDat is set to the initialized logDate
     public DailyLog(LocalDate logDate) {
         this.logDate = logDate;
-        this.exerciseLog = new LogVector();
-        this.weightLog = new LogVector();
+        this.exerciseLog = new ExerciseList();
+        this.weightLog = new WeightList();
     }
 
     ///////////////////////
@@ -32,23 +33,21 @@ public class DailyLog implements Writable {
     }
 
     // EFFECT:  returns new instance of exerciseLog from DailyLog
-    public LogVector getExerciseLog() {
-        return (LogVector)this.exerciseLog.clone();
+    public ExerciseList getExerciseLog() {
+        return this.exerciseLog.clone();
     }
 
     // EFFECT:  returns new instance of exerciseLog from DailyLog
-    public LogVector getWeightLog() {
-        return (LogVector)this.weightLog.clone();
+    public WeightList getWeightLog() {
+        return this.weightLog.clone();
     }
 
     ///////////////////////
     /*      SETTERS      */
     ///////////////////////
 
-    // MODIFIES:    this
-    // EFFECT:      changes this.logDate to logDate
     public void setLogDate(LocalDate logDate) {
-        this.logDate = logDate;
+        this.logDate.adjustInto(logDate);
     }
 
     ///////////////////////
@@ -65,10 +64,8 @@ public class DailyLog implements Writable {
 
     // MODIFIES: this
     // EFFECT: adds all ExerciseEntries from newEntries vector to exercisesLog
-    public void logNewExercise(LogVector newEntries) {
-        for (LogEntry ee : newEntries) {
-            logNewWeight((WeightEntry) ee);
-        }
+    public void logNewExercise(LogList newEntries) {
+        exerciseLog.addAll(newEntries);
     }
 
     // MODIFIES: this
@@ -93,9 +90,7 @@ public class DailyLog implements Writable {
     //                               2 - duration * scalar * intensity ^ scalar
     //                            else - duration
     public int dailyExerciseScore(int scaleType) {
-        ExerciseStat exerciseStat = new ExerciseStat();
-        exerciseLog.summary(exerciseStat, scaleType);
-        return (int)exerciseStat.getScore();
+        return exerciseLog.summary(scaleType);
     }
 
     // WEIGHT FUNCTIONS
@@ -108,7 +103,7 @@ public class DailyLog implements Writable {
 
     // MODIFIES:    this
     // EFFECTS:     adds all WeightEntries from newEntries vector to weightLog
-    public void logNewWeight(LogVector newEntries) {
+    public void logNewWeight(LogList newEntries) {
         for (LogEntry we : newEntries) {
             logNewWeight((WeightEntry) we);
         }
@@ -116,9 +111,7 @@ public class DailyLog implements Writable {
 
     // EFFECTS:     returns average of all WeightEntries rounded to NUM_DECIMAL decimal points
     public double dailyWeightAverage() {
-        WeightStat weightStat = new WeightStat();
-        weightLog.summary(weightStat);
-        return weightStat.getWeight();
+        return weightLog.summary();
     }
 
     ///////////////////////
@@ -129,8 +122,8 @@ public class DailyLog implements Writable {
     public JSONObject toJson() {
         JSONObject json = new JSONObject();
         json.put("date", logDateToJson());
-        json.put("exerciseLog", exerciseLog.toJson());
-        json.put("weightLog", weightLog.toJson());
+        json.put("exerciseLog", exerciseLog.toJson().getJSONArray("LogList"));
+        json.put("weightLog", weightLog.toJson().getJSONArray("LogList"));
         return json;
     }
 

@@ -3,6 +3,8 @@ package model;
 import exceptions.OutOfRange;
 import model.entries.ExerciseEntry;
 import model.entries.LogEntry;
+import model.vectors.ExerciseList;
+import model.vectors.LogList;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -10,7 +12,7 @@ import java.time.LocalTime;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-public class LogVectorTest {
+public class LogListTest {
     // since LogEntry is abstract ExerciseLogs are used as entries with apparent type LogEntry
     LocalTime t1 = LocalTime.parse("00:00");
     LocalTime t2 = LocalTime.parse("12:00");
@@ -19,9 +21,9 @@ public class LogVectorTest {
     LogEntry e2;
     LogEntry e3;
     LogEntry e4;
-    LogVector v1;
-    LogVector v2;
-    LogVector v3;
+    LogList v1;
+    LogList v2;
+    LogList v3;
 
     @BeforeEach
     public void runBefore() {
@@ -31,16 +33,16 @@ public class LogVectorTest {
             e3 = new ExerciseEntry(3, t3,"exercise3",10,60);
             e4 = new ExerciseEntry(4, t1,"exercise2",7,13);
 
-            v1 = new LogVector();
+            v1 = new ExerciseList();
             v1.add(e1);
             v1.add(e2);
             v1.add(e3);
             v1.add(e4);
 
-            v2 = new LogVector();
+            v2 = new ExerciseList();
             v2.add(e1);
 
-            v3 = new LogVector();
+            v3 = new ExerciseList();
         } catch (OutOfRange e) {
             // all inputs valid
         }

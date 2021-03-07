@@ -1,4 +1,4 @@
 {
-  "lastAddress": "./data/defaultRecoveryTrace.json",
-  "lastPreferences": "./data/recoveryTracePreferences.json"
+    "lastPreferences": "./data/defaultRecoveryTrace.json",
+    "lastAddress": "./data/defaultRecoveryTrace.json"
 }

@@ -3,6 +3,8 @@ package model;
 import exceptions.OutOfRange;
 import model.entries.ExerciseEntry;
 import model.statistics.ExerciseStat;
+import model.vectors.ExerciseList;
+import model.vectors.LogList;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -14,7 +16,7 @@ import static org.junit.jupiter.api.Assertions.*;
 class DailyLogTest {
     private DailyLog testDailyLog;
     private DailyLog testDailyLogFull;
-    private LogVector lv;
+    private LogList lv;
     private ExerciseEntry e1;
     private ExerciseEntry e2;
     private ExerciseEntry e3;
@@ -42,13 +44,13 @@ class DailyLogTest {
         testDailyLogFull.logNewExercise(e3);
         testDailyLogFull.logNewExercise(e4);
         testDailyLogFull.logNewExercise(e5);
-        lv = new LogVector();
+        lv = new ExerciseList();
     }
 
     @Test
     void testConstructor() {
         assertEquals(LocalDate.parse("2021-02-22"),testDailyLog.getLogDate());
-        assertEquals(new LogVector(),testDailyLog.getExerciseLog());
+        assertEquals(new ExerciseList(),testDailyLog.getExerciseLog());
     }
 
     @Test
@@ -122,7 +124,7 @@ class DailyLogTest {
     @Test
     void testRemoveExercise() {
         testDailyLog.removeExercise(2);
-        assertEquals(new LogVector(), testDailyLog.getExerciseLog());
+        assertEquals(new ExerciseList(), testDailyLog.getExerciseLog());
 
         testDailyLogFull.removeExercise(2);
         testDailyLogFull.removeExercise(3);

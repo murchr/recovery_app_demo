@@ -7,10 +7,13 @@ import java.time.LocalTime;
 import exceptions.OutOfRange;
 import model.DailyLog;
 import model.DailyLogMap;
-import model.LogVector;
+import model.statistics.ExerciseStat;
+import model.vectors.ExerciseList;
+import model.vectors.LogList;
 import model.entries.ExerciseEntry;
 import model.entries.LogEntry;
 import model.entries.WeightEntry;
+import model.vectors.WeightList;
 import org.json.*;
 
 // modeled after JsonSerializationDemo
@@ -21,20 +24,35 @@ public class JsonRecoveryReader extends JsonReader {
         super(source);
     }
 
-    // MODIFIES:    dailyLog, historicalLog
-    // EFFECTS:     reads DailyLog from file and returns it;
+
+    // EFFECTS:     reads DailyLogMap from file and returns it;
     //              throws IOException if an error occurs reading data from file
-    public DailyLogMap read() throws IOException {
+    public DailyLogMap readDailyLogMap() throws IOException {
         String jsonData = readFile(source);
         JSONObject jsonObject = new JSONObject(jsonData);
         return parseDailyLogMap(jsonObject);
     }
 
-    //EFFECTS: parses dailyLog from jsonObject and returns it
+    // EFFECTS:     reads activeDate from file and returns it;
+    //              throws IOException if an error occurs reading data from file
+    public LocalDate readActiveDay() throws IOException {
+        String jsonData = readFile(source);
+        JSONObject jsonObject = new JSONObject(jsonData);
+        return parseLocalDate(jsonObject.getJSONObject("activeDate"));
+    }
+
+    // EFFECTS:     reads user from file and returns it;
+    //              throws IOException if an error occurs reading data from file
+    public String readUser() throws IOException {
+        String jsonData = readFile(source);
+        JSONObject jsonObject = new JSONObject(jsonData);
+        return jsonObject.getString("user");
+    }
+
+    //EFFECTS: parses dailyLogMap from jsonObject and returns it
     private DailyLogMap parseDailyLogMap(JSONObject jsonObject) {
-        String user = jsonObject.getString("user");
-        LocalDate activeDate = parseLocalDate(jsonObject.getJSONObject("activeDate"));
-        DailyLogMap dailyLogMap = new DailyLogMap(user, activeDate);
+
+        DailyLogMap dailyLogMap = new DailyLogMap();
         JSONArray jsonArray = jsonObject.getJSONArray("DailyLogMap");
         for (Object json : jsonArray) {
             JSONObject dailyLog = (JSONObject) json;
@@ -45,40 +63,34 @@ public class JsonRecoveryReader extends JsonReader {
 
     //EFFECTS: parses dailyLog from jsonObject and returns it
     private DailyLog parseDailyLog(JSONObject jsonObject) {
-        ExerciseEntry emptyExerciseEntry;
-        WeightEntry emptyWeightEntry;
+        DailyLog dailyLog = new DailyLog(parseLocalDate(jsonObject.getJSONObject("date")));
+        dailyLog.logNewExercise(parseExerciseLog(jsonObject.getJSONObject("exerciseLog")));
+        dailyLog.logNewWeight(parseWeightLog(jsonObject.getJSONObject("weightLog")));
 
-        try {
-            emptyExerciseEntry = new ExerciseEntry(1, "", 1, 1);
-            emptyWeightEntry = new WeightEntry(1, 1.0);
-
-            DailyLog dailyLog = new DailyLog(parseLocalDate(jsonObject.getJSONObject("date")));
-            dailyLog.logNewExercise(parseLogVector(jsonObject.getJSONObject("exerciseLog"), emptyExerciseEntry));
-            dailyLog.logNewWeight(parseLogVector(jsonObject.getJSONObject("weightLog"), emptyWeightEntry));
-
-            return dailyLog;
-        } catch (OutOfRange e) {
-            System.out.println("Error in valid constructor of LogEntry");
-        }
-        return null;
+        return dailyLog;
     }
 
 
-    //EFFECTS: parses LogVector from jsonObject and returns it, parses actual type of LogEntry for each element
-    private LogVector parseLogVector(JSONObject jsonObject, LogEntry type) {
-        LogVector logVector = new LogVector();
-        JSONArray jsonArray = jsonObject.getJSONArray("LogVector");
+    //EFFECTS: parses ExerciseList from jsonObject and returns it
+    private ExerciseList parseExerciseLog(JSONObject jsonObject) {
+        ExerciseList exerciseList = new ExerciseList();
+        JSONArray jsonArray = jsonObject.getJSONArray("exerciseLog");
         for (Object json : jsonArray) {
             JSONObject logEntry = (JSONObject) json;
-            if (type instanceof ExerciseEntry) {
-                logVector.add(parseExerciseEntry(logEntry));
-            } else if (type instanceof WeightEntry) {
-                logVector.add(parseWeightEntry(logEntry));
-            } else {
-                System.out.println("Error in identifying type of LogEntry");
-            }
+            exerciseList.add(parseExerciseEntry(logEntry));
         }
-        return logVector;
+        return exerciseList;
+    }
+
+    //EFFECTS: parses WeightList from jsonObject and returns it
+    private LogList parseWeightLog(JSONObject jsonObject) {
+        WeightList weightList = new WeightList();
+        JSONArray jsonArray = jsonObject.getJSONArray("weightLog");
+        for (Object json : jsonArray) {
+            JSONObject logEntry = (JSONObject) json;
+            weightList.add(parseWeightEntry(logEntry));
+        }
+        return weightList;
     }
 
     //EFFECTS: parses dailyLog from jsonObject and returns it

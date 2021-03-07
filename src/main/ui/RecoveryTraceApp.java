@@ -4,7 +4,7 @@ import exceptions.OutOfRange;
 import model.DailyLog;
 import model.DailyLogMap;
 import model.entries.ExerciseEntry;
-import model.LogVector;
+import model.vectors.LogList;
 import model.entries.LogEntry;
 import model.entries.WeightEntry;
 import persistence.*;
@@ -27,7 +27,10 @@ public class RecoveryTraceApp implements Serializable {
 
     private DailyLog dailyLog;
     private DailyLogMap historicalLog;
+    private LocalDate activeDate;
+    private String user;
     private Addresses addresses;
+
 
     // EFFECTS: runs the RecoveryTraceApp
     public RecoveryTraceApp() {
@@ -88,7 +91,7 @@ public class RecoveryTraceApp implements Serializable {
     }
 
     // MODIFIES:    this
-    // EFFECTS:     loads historicalLog from user determined file
+    // EFFECTS:     loads historicalLog, activeDate, and user from user determined file
     private void loadRuntimeFrom() throws IOException {
         String source;
         System.out.println("Enter the file address as \"./data/FileName.json\":");
@@ -100,20 +103,30 @@ public class RecoveryTraceApp implements Serializable {
     }
 
     // MODIFIES:    this
-    // EFFECTS:     loads historicalLog from default file
+    // EFFECTS:     creates new historicalLog, sets activeDate to current, retrieves new user,
+    //              and changes last accessed file to default
     private void loadRuntimeDefault() throws IOException {
         addresses.setRecoveryAddress(DEFAULT_JSON);
-        LocalDate currentDate = LocalDate.now();
+        activeDate = LocalDate.now();
 
         initialize(DEFAULT_JSON);
 
-        historicalLog = new DailyLogMap("Ryan",currentDate);
-        dailyLog = new DailyLog(currentDate);
+        user = setUser();
+        historicalLog = new DailyLogMap();
+        dailyLog = new DailyLog(activeDate);
         storeDay();
     }
 
+    // EFFECTS: sets user to entered name
+    private String setUser() {
+        Scanner input = new Scanner(System.in);
+        input.useDelimiter("\n");
+        System.out.println("Enter your username");
+        return input.next();
+    }
+
     // MODIFIES:    this
-    // EFFECTS:     loads historicalLog from last accessed file
+    // EFFECTS:     loads historicalLog, activeDate, and user from last accessed file
     private void loadRuntimeLast() throws IOException {
         loadRuntime(addresses.getRecoveryAddress());
     }
@@ -123,9 +136,12 @@ public class RecoveryTraceApp implements Serializable {
     private void loadRuntime(String source) throws IOException {
         initialize(source);
 
-        historicalLog = jsonRecoveryReader.read();
-        dailyLog = historicalLog.get(historicalLog.getActiveDate());
-        System.out.println("Loaded " + historicalLog.getUser() + " from " + addresses.getRecoveryAddress());
+        historicalLog = jsonRecoveryReader.readDailyLogMap();
+        activeDate = jsonRecoveryReader.readActiveDay();
+        user = jsonRecoveryReader.readUser();
+
+        dailyLog = historicalLog.get(activeDate);
+        System.out.println("Loaded " + user + " from " + addresses.getRecoveryAddress());
     }
 
     // MODIFIES: this
@@ -299,7 +315,7 @@ public class RecoveryTraceApp implements Serializable {
     // EFFECTS: displays exercises of current entry
     private void displayExercises() {
         ExerciseEntry exerciseEntry;
-        LogVector exercisesLog = dailyLog.getExerciseLog();
+        LogList exercisesLog = dailyLog.getExerciseLog();
 
         for (LogEntry logEntry : exercisesLog) {
             exerciseEntry = (ExerciseEntry) logEntry;
@@ -335,11 +351,11 @@ public class RecoveryTraceApp implements Serializable {
             d = LocalDate.parse(command);
             storeDay();
             dailyLog = historicalLog.get(d);
+            activeDate = d;
             if (dailyLog == null) {
                 dailyLog = new DailyLog(d);
                 historicalLog.put(dailyLog);
             }
-            historicalLog.setActiveDate(dailyLog.getLogDate());
 
             System.out.print("Day successfully changed to ");
             printCurrentDate();
@@ -375,7 +391,7 @@ public class RecoveryTraceApp implements Serializable {
 
         try {
             jsonRecoveryWriter.open();
-            jsonRecoveryWriter.write(historicalLog);
+            jsonRecoveryWriter.write(user, activeDate, historicalLog);
             jsonRecoveryWriter.close();
             System.out.println("Saved DailyLog and DailyLogMap to" + addresses.getRecoveryAddress());
             saveAddress();

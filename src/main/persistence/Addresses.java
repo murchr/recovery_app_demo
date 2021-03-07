@@ -29,6 +29,9 @@ public class Addresses implements Writable {
 
     @Override
     public JSONObject toJson() {
-        return null;
+        JSONObject jsonObject = new JSONObject();
+        jsonObject.put("lastPreferences", preferencesAddress);
+        jsonObject.put("lastAddress", recoveryAddress);
+        return jsonObject;
     }
 }

@@ -2,6 +2,8 @@ package model;
 
 import exceptions.OutOfRange;
 import model.entries.ExerciseEntry;
+import model.vectors.ExerciseList;
+import model.vectors.LogList;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -28,22 +30,22 @@ public class DailyLogMapTest {
     int numOfDays = 10; // must be greater than 7 for test file
     LocalDate startDate = LocalDate.of(2021,1,1);
     Period daysBetweenEntries = Period.of(0,0,1);
-    ConcurrentSkipListMap<LocalDate, LogVector> storedLV;
+    ConcurrentSkipListMap<LocalDate, LogList> storedLV;
 
 
 
     @BeforeEach
     public void runBefore() {
-        LogVector lv;
+        LogList lv;
         DailyLog dl;
         storedLV = new ConcurrentSkipListMap<>();
-        DLM0 = new DailyLogMap("default1", startDate);
-        DLM = new DailyLogMap("default2", startDate);
+        DLM0 = new DailyLogMap();
+        DLM = new DailyLogMap();
 
         LocalDate day = LocalDate.from(startDate);
         // generates new map of dailyLogs
         for(int i = 0; i < numOfDays; i++, day.plus(daysBetweenEntries)) {
-            lv = new LogVector();
+            lv = new ExerciseList();
             dl = new DailyLog(day);
             // builds daily exerciseLog
             try {
@@ -63,9 +65,9 @@ public class DailyLogMapTest {
 
     @Test
     public void testGetExercisesBetween() {
-        ConcurrentSkipListMap<LocalDate, LogVector> split1;
-        ConcurrentSkipListMap<LocalDate, LogVector> split3;
-        ConcurrentSkipListMap<LocalDate, LogVector> split5;
+        ConcurrentSkipListMap<LocalDate, LogList> split1;
+        ConcurrentSkipListMap<LocalDate, LogList> split3;
+        ConcurrentSkipListMap<LocalDate, LogList> split5;
         LocalDate day0;
         LocalDate day;
 

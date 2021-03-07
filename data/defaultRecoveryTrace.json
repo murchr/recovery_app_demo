@@ -1,41 +1,69 @@
 {
-    "DailyLogMap": {
-        "DailyLogMap": "placeholder",
-        "dailyLog": {
-            "date": {
-                "month": 3,
-                "year": 2021,
-                "day": 2
-            },
-            "exerciseLog": {"LogVector": [{
-                "intensity": 7,
-                "duration": 25,
-                "entryTime": {
-                    "hour": 15,
-                    "minute": 8
-                },
-                "exerciseType": "run",
-                "entryId": 1
-            }]},
-            "weightLog": {"LogVector": []}
-        }
-    },
-    "DailyLog": {
-        "date": {
-            "month": 3,
-            "year": 2018,
-            "day": 1
+  "DailyLogMap": [
+    {
+      "date": {
+        "month": 3,
+        "year": 2021,
+        "day": 5
+      },
+      "exerciseLog": [],
+      "weightLog": [{
+        "entryTime": {
+          "hour": 0,
+          "minute": 18
         },
-        "exerciseLog": {"LogVector": [{
-            "intensity": 10,
-            "duration": 10,
-            "entryTime": {
-                "hour": 15,
-                "minute": 10
-            },
-            "exerciseType": "sprint",
-            "entryId": 1
-        }]},
-        "weightLog": {"LogVector": []}
+        "weight": 156,
+        "entryId": 1
+      }]
+    },
+    {
+      "date": {
+        "month": 3,
+        "year": 2021,
+        "day": 6
+      },
+      "exerciseLog": [{
+        "intensity": 2,
+        "duration": 60,
+        "entryTime": {
+          "hour": 0,
+          "minute": 17
+        },
+        "exerciseType": "walk",
+        "entryId": 1
+      }],
+      "weightLog": []
+    },
+    {
+      "date": {
+        "month": 3,
+        "year": 2021,
+        "day": 7
+      },
+      "exerciseLog": [{
+        "intensity": 7,
+        "duration": 35,
+        "entryTime": {
+          "hour": 0,
+          "minute": 16
+        },
+        "exerciseType": "run",
+        "entryId": 1
+      }],
+      "weightLog": [{
+        "entryTime": {
+          "hour": 0,
+          "minute": 16
+        },
+        "weight": 180,
+        "entryId": 1
+      }]
     }
+  ],
+  "activeDate": {
+    "month": 3,
+    "year": 2021,
+    "day": 5
+  },
+  "user": "Ryan Murch"
 }
