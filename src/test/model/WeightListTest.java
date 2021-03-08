@@ -121,7 +121,16 @@ public class WeightListTest {
     }
 
     @Test
-    public void testSummary() {
+    public void testClone() {
+        WeightList l2Clone = l2.clone();
+        l2Clone.add(w3);
+        assertNotEquals(l2, l2Clone);
+    }
 
+    @Test
+    public void testSummary() {
+        assertEquals((w1.getWeight() + w2.getWeight() + w3.getWeight() + w4.getWeight()) / 4, l1.summary());
+        assertEquals(w1.getWeight(), l2.summary());
+        assertEquals(0, l3.summary());
     }
 }

@@ -13,8 +13,7 @@ public class ExerciseList extends LogList {
         return (ExerciseList)super.clone();
     }
 
-    // MODIFIES: summaryStat
-    // EFFECTS: applies process method to each element in vector with summaryStat
+    // EFFECTS: applies store method to instance of ExerciseStat for each element in list and returns score
     public int summary(int scaleType) {
         ExerciseStat exerciseStat = new ExerciseStat();
         summary(exerciseStat, scaleType);

@@ -14,8 +14,7 @@ public class WeightList extends LogList {
         return (WeightList)super.clone();
     }
 
-    // MODIFIES: summaryStat
-    // EFFECTS: applies process method to each element in vector with summaryStat
+    // EFFECTS: applies store method to instance of WeightStat for each element in list and returns weight
     public double summary() {
         WeightStat weightStat = new WeightStat();
         summary(weightStat);
