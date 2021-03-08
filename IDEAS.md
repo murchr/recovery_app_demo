@@ -21,4 +21,5 @@ professionals to review relevant data to patient treatment
 - For LogEntries have set functions throw OutOfRange exceptions
     - add handling for exceptions to underlying functions
     - test exception handling
-- TBD
+- Add Visualization code for WeightLog in ui
+- Add Removal code for WeightLog in ui

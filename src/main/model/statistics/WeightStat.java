@@ -6,7 +6,7 @@ import model.entries.WeightEntry;
 public class WeightStat implements SummaryStat {
     private double weight;
     private int numEntries;
-    private static final int NUM_DECIMAL = 1;
+    public static final int NUM_DECIMAL = 1;
 
     @Override
     public void store(LogEntry logEntry) {

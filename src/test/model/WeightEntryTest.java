@@ -11,12 +11,12 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class WeightEntryTest {
 
-    WeightEntry w1;
-    WeightEntry w2;
-    WeightEntry w3;
-    LocalTime t1 = LocalTime.parse("00:00");
-    LocalTime t2 = LocalTime.parse("12:00");
-    LocalTime t3 = LocalTime.parse("13:30");
+    private WeightEntry w1;
+    private WeightEntry w2;
+    private WeightEntry w3;
+    private LocalTime t1 = LocalTime.parse("00:00");
+    private LocalTime t2 = LocalTime.parse("12:00");
+    private LocalTime t3 = LocalTime.parse("13:30");
     @BeforeEach
     public void runBefore() {
         try {

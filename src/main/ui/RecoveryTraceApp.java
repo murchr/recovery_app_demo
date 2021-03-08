@@ -24,7 +24,6 @@ public class RecoveryTraceApp implements Serializable {
     private JsonAddressReader jsonAddressReader;
     private static final String LAST_JSON = "./data/lastRecoveryTraceAddress.json";
     private static final String DEFAULT_JSON = "./data/defaultRecoveryTrace.json";
-    // private static final String PREFER_JSON = "./data/recoveryTracePreferences.json";
 
     private DailyLog dailyLog;
     private DailyLogMap historicalLog;
@@ -188,12 +187,10 @@ public class RecoveryTraceApp implements Serializable {
         System.out.println("\nSelect from:");
         System.out.println("\td -> check dailyLog date");
         System.out.println("\ta -> add new entry");
-        System.out.println("\tt -> get total exercise time today");
-        System.out.println("\tp -> print exercise entries of current dailyLog");
-        System.out.println("\tr -> remove entry by entryId in current dailyLog");
+        System.out.println("\tv -> get visualization of log entries");
+        System.out.println("\tr -> remove Exercise entry by entryId in current dailyLog");
         System.out.println("\tx -> switch active dailyLog with existing dailyLog in dailyLogMap");
-        System.out.println("\ts -> saves current dailyLog and dailyLogMap to file");
-        System.out.println("\tl -> loads dailyLog and dailyLogMap from file");
+        System.out.println("\tm -> memory handling for dailyLogMap (save and load)");
         System.out.println("\tq -> quit");
     }
 
@@ -208,11 +205,8 @@ public class RecoveryTraceApp implements Serializable {
             case "a":
                 addEntry();
                 break;
-            case "t":
-                totalExerciseOn();
-                break;
-            case "p":
-                displayExercises();
+            case "v":
+                visualizeLog();
                 break;
             case "r":
                 removeExercise();
@@ -220,6 +214,58 @@ public class RecoveryTraceApp implements Serializable {
             case "x":
                 changeDate();
                 break;
+            case "m":
+                memoryHandling();
+                break;
+            default:
+                System.out.println("Selection not valid");
+                break;
+        }
+
+    }
+
+    private void visualizeLog() {
+        displayVisualizeMenu();
+        String command = input.next();
+        command = command.toLowerCase();
+        processVisualize(command);
+    }
+
+    private void displayVisualizeMenu() {
+        System.out.println("\nSelect from:");
+        System.out.println("\tt -> get total exercise time today");
+        System.out.println("\tp -> print exercise entries of current dailyLog");
+    }
+
+    private void processVisualize(String command) {
+        switch (command) {
+            case "t":
+                totalExerciseOn();
+                break;
+            case "p":
+                displayExercises();
+                break;
+            default:
+                System.out.println("Selection not valid");
+                break;
+        }
+    }
+
+    private void memoryHandling() {
+        displayMemoryMenu();
+        String command = input.next();
+        command = command.toLowerCase();
+        processMemory(command);
+    }
+
+    private void displayMemoryMenu() {
+        System.out.println("\nSelect from:");
+        System.out.println("\ts -> saves current dailyLog and dailyLogMap to file");
+        System.out.println("\tl -> loads dailyLog and dailyLogMap from file");
+    }
+
+    private void processMemory(String command) {
+        switch (command) {
             case "s":
                 saveRuntime();
                 break;
@@ -230,7 +276,6 @@ public class RecoveryTraceApp implements Serializable {
                 System.out.println("Selection not valid");
                 break;
         }
-
     }
 
     private void addEntry() {

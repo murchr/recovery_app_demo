@@ -12,16 +12,16 @@ import static org.junit.jupiter.api.Assertions.*;
 
 public class WeightListTest {
     // since LogEntry is abstract ExerciseLogs are used as entries with apparent type LogEntry
-    LocalTime t1 = LocalTime.parse("00:00");
-    LocalTime t2 = LocalTime.parse("12:00");
-    LocalTime t3 = LocalTime.parse("13:30");
-    WeightEntry w1;
-    WeightEntry w2;
-    WeightEntry w3;
-    WeightEntry w4;
-    WeightList l1;
-    WeightList l2;
-    WeightList l3;
+    private LocalTime t1 = LocalTime.parse("00:00");
+    private LocalTime t2 = LocalTime.parse("12:00");
+    private LocalTime t3 = LocalTime.parse("13:30");
+    private WeightEntry w1;
+    private WeightEntry w2;
+    private WeightEntry w3;
+    private WeightEntry w4;
+    private WeightList l1;
+    private WeightList l2;
+    private WeightList l3;
 
     @BeforeEach
     public void runBefore() {

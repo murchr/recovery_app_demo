@@ -16,21 +16,21 @@ import static org.junit.jupiter.api.Assertions.*;
 
 public class DailyLogMapTest {
 
-    DailyLogMap DLM0;
-    DailyLogMap DLM;
+    private DailyLogMap DLM0;
+    private DailyLogMap DLM;
 
-    LocalTime[] tSet = {LocalTime.parse("00:00"),LocalTime.parse("01:00"),LocalTime.parse("03:00"),
+    private LocalTime[] tSet = {LocalTime.parse("00:00"),LocalTime.parse("01:00"),LocalTime.parse("03:00"),
             LocalTime.parse("04:00"),LocalTime.parse("05:00"), LocalTime.parse("06:00")};
-    String[] workoutTypes = {"WO1","WO2","WO3"};
+    private String[] workoutTypes = {"WO1","WO2","WO3"};
 
-    int[] dayIntensity = {1,5,10};
-    int[] dayDuration = {1,10,30,60};
-    int workoutsPerDay = 3;
+    private int[] dayIntensity = {1,5,10};
+    private int[] dayDuration = {1,10,30,60};
+    private int workoutsPerDay = 3;
 
-    int numOfDays = 10; // must be greater than 7 for test file
-    LocalDate startDate = LocalDate.of(2021,1,1);
-    Period daysBetweenEntries = Period.of(0,0,1);
-    ConcurrentSkipListMap<LocalDate, LogList> storedLV;
+    private int numOfDays = 10; // must be greater than 7 for test file
+    private LocalDate startDate = LocalDate.of(2021,1,1);
+    private Period daysBetweenEntries = Period.of(0,0,1);
+    private ConcurrentSkipListMap<LocalDate, LogList> storedLV;
 
 
 

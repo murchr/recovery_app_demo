@@ -12,16 +12,16 @@ import static org.junit.jupiter.api.Assertions.*;
 
 public class ExerciseListTest {
     // since LogEntry is abstract ExerciseLogs are used as entries with apparent type LogEntry
-    LocalTime t1 = LocalTime.parse("00:00");
-    LocalTime t2 = LocalTime.parse("12:00");
-    LocalTime t3 = LocalTime.parse("13:30");
-    ExerciseEntry e1;
-    ExerciseEntry e2;
-    ExerciseEntry e3;
-    ExerciseEntry e4;
-    ExerciseList v1;
-    ExerciseList v2;
-    ExerciseList v3;
+    private LocalTime t1 = LocalTime.parse("00:00");
+    private LocalTime t2 = LocalTime.parse("12:00");
+    private LocalTime t3 = LocalTime.parse("13:30");
+    private ExerciseEntry e1;
+    private ExerciseEntry e2;
+    private ExerciseEntry e3;
+    private ExerciseEntry e4;
+    private ExerciseList v1;
+    private ExerciseList v2;
+    private ExerciseList v3;
 
     @BeforeEach
     public void runBefore() {
