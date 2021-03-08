@@ -1,0 +1,130 @@
+{
+    "DailyLogMap": [
+        {
+            "date": {
+                "month": 3,
+                "year": 2021,
+                "day": 4
+            },
+            "exerciseLog": [],
+            "weightLog": []
+        },
+        {
+            "date": {
+                "month": 3,
+                "year": 2021,
+                "day": 5
+            },
+            "exerciseLog": [],
+            "weightLog": [
+                {
+                    "entryTime": {
+                        "hour": 13,
+                        "minute": 10
+                    },
+                    "weight": 182,
+                    "entryId": 1
+                },
+                {
+                    "entryTime": {
+                        "hour": 13,
+                        "minute": 10
+                    },
+                    "weight": 180,
+                    "entryId": 2
+                },
+                {
+                    "entryTime": {
+                        "hour": 13,
+                        "minute": 10
+                    },
+                    "weight": 178,
+                    "entryId": 3
+                }
+            ]
+        },
+        {
+            "date": {
+                "month": 3,
+                "year": 2021,
+                "day": 6
+            },
+            "exerciseLog": [
+                {
+                    "intensity": 3,
+                    "duration": 120,
+                    "entryTime": {
+                        "hour": 13,
+                        "minute": 8
+                    },
+                    "exerciseType": "walk",
+                    "entryId": 1
+                },
+                {
+                    "intensity": 7,
+                    "duration": 10,
+                    "entryTime": {
+                        "hour": 13,
+                        "minute": 9
+                    },
+                    "exerciseType": "pushups",
+                    "entryId": 2
+                },
+                {
+                    "intensity": 4,
+                    "duration": 15,
+                    "entryTime": {
+                        "hour": 13,
+                        "minute": 9
+                    },
+                    "exerciseType": "pullups",
+                    "entryId": 3
+                }
+            ],
+            "weightLog": []
+        },
+        {
+            "date": {
+                "month": 3,
+                "year": 2021,
+                "day": 7
+            },
+            "exerciseLog": [
+                {
+                    "intensity": 7,
+                    "duration": 60,
+                    "entryTime": {
+                        "hour": 13,
+                        "minute": 6
+                    },
+                    "exerciseType": "run",
+                    "entryId": 1
+                },
+                {
+                    "intensity": 10,
+                    "duration": 5,
+                    "entryTime": {
+                        "hour": 13,
+                        "minute": 7
+                    },
+                    "exerciseType": "sprint",
+                    "entryId": 3
+                }
+            ],
+            "weightLog": [{
+                "entryTime": {
+                    "hour": 13,
+                    "minute": 7
+                },
+                "weight": 181,
+                "entryId": 1
+            }]
+        }
+    ],
+    "activeDate": {
+        "month": 3,
+        "year": 2021,
+        "day": 4
+    },
+    "user": "Ryan Murch"
+}
