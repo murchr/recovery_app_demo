@@ -4,7 +4,7 @@ import exceptions.OutOfRange;
 import model.DailyLog;
 import model.DailyLogMap;
 import model.entries.ExerciseEntry;
-import model.vectors.LogList;
+import model.lists.LogList;
 import model.entries.LogEntry;
 import model.entries.WeightEntry;
 import persistence.*;
@@ -24,6 +24,7 @@ public class RecoveryTraceApp implements Serializable {
     private JsonAddressReader jsonAddressReader;
     private static final String LAST_JSON = "./data/lastRecoveryTraceAddress.json";
     private static final String DEFAULT_JSON = "./data/defaultRecoveryTrace.json";
+    // private static final String PREFER_JSON = "./data/recoveryTracePreferences.json";
 
     private DailyLog dailyLog;
     private DailyLogMap historicalLog;
@@ -42,6 +43,10 @@ public class RecoveryTraceApp implements Serializable {
 
         startCommand = input.next();
         startCommand = startCommand.toLowerCase();
+
+        // test addresses
+        System.out.println("last file:" + addresses.getRecoveryAddress());
+        System.out.println("preferences:" + addresses.getPreferencesAddress());
 
         try {
             processLoadOptions(startCommand);
@@ -94,12 +99,13 @@ public class RecoveryTraceApp implements Serializable {
     // EFFECTS:     loads historicalLog, activeDate, and user from user determined file
     private void loadRuntimeFrom() throws IOException {
         String source;
-        System.out.println("Enter the file address as \"./data/FileName.json\":");
+        System.out.println("Enter the FileName as seen in: \"./data/FileName.json\":");
+        System.out.println("e.g. FileName (do not include path or .json");
         source = input.next();
 
-        addresses.setRecoveryAddress(source);
+        addresses.setRecoveryAddress("./data/" + source + ".json");
 
-        loadRuntime(source);
+        loadRuntime(addresses.getRecoveryAddress());
     }
 
     // MODIFIES:    this
@@ -146,7 +152,7 @@ public class RecoveryTraceApp implements Serializable {
 
     // MODIFIES: this
     // EFFECTS: initializes RecoveryTraceApp for reading and writing to file from source
-    private void initialize(String source) {
+    private void initialize(String source) throws IOException {
         jsonRecoveryWriter = new JsonRecoveryWriter(source);
         jsonRecoveryReader = new JsonRecoveryReader(source);
     }
@@ -166,7 +172,7 @@ public class RecoveryTraceApp implements Serializable {
             displayMenu();
             command = input.next();
             command = command.toLowerCase();
-            
+
             if (command.equals("q")) {
                 keepGoing = false;
             } else {
@@ -375,9 +381,9 @@ public class RecoveryTraceApp implements Serializable {
         int thirdDash = command.indexOf('-', secondDash + 1);
 
         if (firstDash == -1 || secondDash == -1 || thirdDash != -1) {
-            throw new DateTimeParseException("Invalid dashes -","",205);
+            throw new DateTimeParseException("Invalid dashes -", "", 205);
         }
-        year = Integer.parseInt(command.substring(0,firstDash));
+        year = Integer.parseInt(command.substring(0, firstDash));
         month = Integer.parseInt(command.substring(firstDash + 1, secondDash));
         day = Integer.parseInt(command.substring(secondDash + 1));
 
@@ -420,7 +426,6 @@ public class RecoveryTraceApp implements Serializable {
             System.out.println("Unable to read from file: " + addresses.getRecoveryAddress());
         }
     }
-
 
 
     // EFFECTS: prints the date of the current dailyLog being accessed

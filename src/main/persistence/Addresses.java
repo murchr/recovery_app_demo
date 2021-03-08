@@ -6,7 +6,7 @@ public class Addresses implements Writable {
     private String preferencesAddress;
     private String recoveryAddress;
 
-    public Addresses(String preferencesAddress, String recoveryAddress) {
+    public Addresses(String recoveryAddress, String preferencesAddress) {
         this.preferencesAddress = preferencesAddress;
         this.recoveryAddress = recoveryAddress;
     }

@@ -3,8 +3,8 @@ package model;
 import exceptions.OutOfRange;
 import model.entries.ExerciseEntry;
 import model.statistics.ExerciseStat;
-import model.vectors.ExerciseList;
-import model.vectors.LogList;
+import model.lists.ExerciseList;
+import model.lists.LogList;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -55,8 +55,8 @@ class DailyLogTest {
 
     @Test
     void testSetDate() {
-        testDailyLog.setLogDate(LocalDate.parse("2021-03-22"));
-        assertEquals(LocalDate.parse("2021-03-22"), testDailyLog.getLogDate());
+        testDailyLog.setLogDate(LocalDate.parse("2021-05-22"));
+        assertEquals(LocalDate.parse("2021-05-22"), testDailyLog.getLogDate());
     }
 
     @Test

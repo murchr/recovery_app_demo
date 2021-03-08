@@ -3,9 +3,9 @@ package model;
 import model.entries.ExerciseEntry;
 import model.entries.LogEntry;
 import model.entries.WeightEntry;
-import model.vectors.ExerciseList;
-import model.vectors.LogList;
-import model.vectors.WeightList;
+import model.lists.ExerciseList;
+import model.lists.LogList;
+import model.lists.WeightList;
 import org.json.JSONObject;
 import persistence.Writable;
 
@@ -13,7 +13,7 @@ import java.time.LocalDate;
 
 public class DailyLog implements Writable {
 
-    private final LocalDate logDate;
+    private LocalDate logDate;
     private final ExerciseList exerciseLog;
     private final WeightList weightLog;
 
@@ -47,7 +47,7 @@ public class DailyLog implements Writable {
     ///////////////////////
 
     public void setLogDate(LocalDate logDate) {
-        this.logDate.adjustInto(logDate);
+        this.logDate = (LocalDate) logDate.adjustInto(this.logDate);
     }
 
     ///////////////////////

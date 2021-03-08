@@ -2,9 +2,7 @@ package model;
 
 import exceptions.OutOfRange;
 import model.entries.ExerciseEntry;
-import model.entries.LogEntry;
-import model.vectors.ExerciseList;
-import model.vectors.LogList;
+import model.lists.ExerciseList;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -12,18 +10,18 @@ import java.time.LocalTime;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-public class LogListTest {
+public class ExerciseListTest {
     // since LogEntry is abstract ExerciseLogs are used as entries with apparent type LogEntry
     LocalTime t1 = LocalTime.parse("00:00");
     LocalTime t2 = LocalTime.parse("12:00");
     LocalTime t3 = LocalTime.parse("13:30");
-    LogEntry e1;
-    LogEntry e2;
-    LogEntry e3;
-    LogEntry e4;
-    LogList v1;
-    LogList v2;
-    LogList v3;
+    ExerciseEntry e1;
+    ExerciseEntry e2;
+    ExerciseEntry e3;
+    ExerciseEntry e4;
+    ExerciseList v1;
+    ExerciseList v2;
+    ExerciseList v3;
 
     @BeforeEach
     public void runBefore() {
@@ -119,6 +117,11 @@ public class LogListTest {
         // element not found empty vector
         assertNull(v3.getFromId(1));
         assertNull(v3.getFromId(3));
+
+    }
+
+    @Test
+    public void testSummary() {
 
     }
 }

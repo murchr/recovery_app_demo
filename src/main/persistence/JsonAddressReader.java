@@ -6,12 +6,11 @@ import java.io.IOException;
 
 public class JsonAddressReader extends JsonReader {
     // EFFECTS: constructs reader to read from source file
-    public JsonAddressReader(String source) {
+    public JsonAddressReader(String source) throws IOException {
         super(source);
     }
 
-    public Addresses read() throws IOException {
-        String jsonData = readFile(source);
+    public Addresses read() {
         JSONObject jsonObject = new JSONObject(jsonData);
         return parseAddresses(jsonObject);
     }

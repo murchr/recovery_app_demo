@@ -1,4 +1,4 @@
-package model.vectors;
+package model.lists;
 
 import model.entries.LogEntry;
 import model.statistics.SummaryStat;
@@ -7,7 +7,6 @@ import org.json.JSONObject;
 import persistence.Writable;
 
 import java.util.ArrayList;
-import java.util.Vector;
 
 public abstract class LogList extends ArrayList<LogEntry> implements Writable {
 

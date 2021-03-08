@@ -35,6 +35,7 @@ professionals to review relevant data to patient treatment
 
 ## Phase 2: User Stories
 
-- As a user, I want to be able to be able to load an instance of DailyLogMap from a file
-- As a user, I want to be able to add DailyLog entries from a file to runtime DailyLogMap 
+- As a user, I want to be able to be able to load an instance of DailyLogMap from a designated file
+- As a user, I want to be able to load an instance of the last accessed instance of DailyLogMap
+- As a user, I want to be able to add DailyLog entries from a file to runtime DailyLogMap
 - As a user, I want to be able to save my DailyLogMap to a file.

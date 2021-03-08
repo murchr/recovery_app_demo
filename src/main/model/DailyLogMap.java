@@ -1,7 +1,7 @@
 package model;
 
 
-import model.vectors.LogList;
+import model.lists.LogList;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import persistence.Writable;

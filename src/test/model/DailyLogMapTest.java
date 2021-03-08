@@ -2,8 +2,8 @@ package model;
 
 import exceptions.OutOfRange;
 import model.entries.ExerciseEntry;
-import model.vectors.ExerciseList;
-import model.vectors.LogList;
+import model.lists.ExerciseList;
+import model.lists.LogList;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 

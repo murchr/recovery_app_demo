@@ -1,4 +1,4 @@
-package model.vectors;
+package model.lists;
 
 import model.statistics.ExerciseStat;
 
