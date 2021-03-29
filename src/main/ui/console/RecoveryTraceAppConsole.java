@@ -1,4 +1,4 @@
-package ui;
+package ui.console;
 
 import exceptions.OutOfRange;
 import model.DailyLog;
@@ -9,14 +9,14 @@ import model.entries.LogEntry;
 import model.entries.WeightEntry;
 import persistence.*;
 
+import javax.swing.*;
 import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.io.Serializable;
 import java.time.LocalDate;
 import java.time.format.DateTimeParseException;
 import java.util.Scanner;
 
-public class RecoveryTraceApp implements Serializable {
+public class RecoveryTraceAppConsole extends JFrame {
     private Scanner input;
     private JsonRecoveryWriter jsonRecoveryWriter;
     private JsonRecoveryReader jsonRecoveryReader;
@@ -30,15 +30,19 @@ public class RecoveryTraceApp implements Serializable {
     private LocalDate activeDate;
     private String user;
     private Addresses addresses;
+    private DisplayOptions displayOptions;
+
+    private static final boolean SUPPRESS_CONSOLE = false;
 
 
     // EFFECTS: runs the RecoveryTraceApp
-    public RecoveryTraceApp() {
+    public RecoveryTraceAppConsole() {
         String startCommand;
+        displayOptions = new DisplayOptions();
 
         input = new Scanner(System.in);
         initializeAddress();
-        displayLoadOptions();
+        displayOptions.displayLoadOptions();
 
         startCommand = input.next();
         startCommand = startCommand.toLowerCase();
@@ -71,12 +75,6 @@ public class RecoveryTraceApp implements Serializable {
         }
     }
 
-    // EFFECTS: prints loading options to console
-    private void displayLoadOptions() {
-        System.out.println("\tl\t-> Load from file");
-        System.out.println("\tn\t-> create new session (WARNING: overwrites default save)");
-        System.out.println("\telse\t-> Load previous session");
-    }
 
     // MODIFIES: this
     // EFFECTS: processes user startCommand
@@ -168,7 +166,7 @@ public class RecoveryTraceApp implements Serializable {
         String command;
 
         while (keepGoing) {
-            displayMenu();
+            displayOptions.displayMenu();
             command = input.next();
             command = command.toLowerCase();
 
@@ -179,19 +177,6 @@ public class RecoveryTraceApp implements Serializable {
             }
 
         }
-    }
-
-    // EFFECTS: prints options for user to interact with RecoveryTraceApp
-    // REFERENCE: code structured around TellerApp example, some code copied verbatim
-    private void displayMenu() {
-        System.out.println("\nSelect from:");
-        System.out.println("\td -> check dailyLog date");
-        System.out.println("\ta -> add new entry");
-        System.out.println("\tv -> get visualization of log entries");
-        System.out.println("\tr -> remove Exercise entry by entryId in current dailyLog");
-        System.out.println("\tx -> switch active dailyLog with existing dailyLog in dailyLogMap");
-        System.out.println("\tm -> memory handling for dailyLogMap (save and load)");
-        System.out.println("\tq -> quit");
     }
 
     // MODIFIES: this
@@ -225,17 +210,12 @@ public class RecoveryTraceApp implements Serializable {
     }
 
     private void visualizeLog() {
-        displayVisualizeMenu();
+        displayOptions.displayVisualizeMenu();
         String command = input.next();
         command = command.toLowerCase();
         processVisualize(command);
     }
 
-    private void displayVisualizeMenu() {
-        System.out.println("\nSelect from:");
-        System.out.println("\tt -> get total exercise time today");
-        System.out.println("\tp -> print exercise entries of current dailyLog");
-    }
 
     private void processVisualize(String command) {
         switch (command) {
@@ -252,55 +232,37 @@ public class RecoveryTraceApp implements Serializable {
     }
 
     private void memoryHandling() {
-        displayMemoryMenu();
+        displayOptions.displayMemoryMenu();
         String command = input.next();
         command = command.toLowerCase();
         processMemory(command);
     }
 
-    private void displayMemoryMenu() {
-        System.out.println("\nSelect from:");
-        System.out.println("\ts -> saves current dailyLog and dailyLogMap to file");
-        System.out.println("\tl -> loads dailyLog and dailyLogMap from file");
-    }
-
     private void processMemory(String command) {
         switch (command) {
-            case "s":
-                saveRuntime();
+            case "s": saveRuntime();
                 break;
-            case "l":
-                handleLoadRuntimeFrom();
+            case "l": handleLoadRuntimeFrom();
                 break;
-            default:
-                System.out.println("Selection not valid");
+            default: System.out.println("Selection not valid");
                 break;
         }
     }
 
     private void addEntry() {
-        displayEntryMenu();
+        displayOptions.displayEntryMenu();
         String command = input.next();
         command = command.toLowerCase();
         processEntry(command);
     }
 
-    private void displayEntryMenu() {
-        System.out.println("\nSelect from:");
-        System.out.println("\te -> add new ExerciseEntry");
-        System.out.println("\tw -> add new WeightEntry");
-    }
-
     private void processEntry(String command) {
         switch (command) {
-            case "e":
-                addExerciseEntry();
+            case "e": addExerciseEntry();
                 break;
-            case "w":
-                addWeightEntry();
+            case "w": addWeightEntry();
                 break;
-            default:
-                System.out.println("Selection not valid");
+            default: System.out.println("Selection not valid");
                 break;
         }
     }
@@ -461,7 +423,6 @@ public class RecoveryTraceApp implements Serializable {
         } catch (FileNotFoundException e) {
             System.out.println("Unable to write to file: " + LAST_JSON);
         }
-
     }
 
     private void handleLoadRuntimeFrom() {

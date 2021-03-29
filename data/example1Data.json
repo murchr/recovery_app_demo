@@ -3,6 +3,15 @@
         {
             "date": {
                 "month": 3,
+                "year": 2020,
+                "day": 6
+            },
+            "exerciseLog": [],
+            "weightLog": []
+        },
+        {
+            "date": {
+                "month": 3,
                 "year": 2021,
                 "day": 4
             },
@@ -81,7 +90,14 @@
                     "entryId": 3
                 }
             ],
-            "weightLog": []
+            "weightLog": [{
+                "entryTime": {
+                    "hour": 11,
+                    "minute": 13
+                },
+                "weight": 158,
+                "entryId": 6
+            }]
         },
         {
             "date": {
@@ -123,7 +139,7 @@
     ],
     "activeDate": {
         "month": 3,
-        "year": 2021,
+        "year": 2020,
         "day": 6
     },
     "user": "Ryan Murch"
