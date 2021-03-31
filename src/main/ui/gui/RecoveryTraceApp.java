@@ -1,7 +1,5 @@
 package ui.gui;
 
-import model.DailyLog;
-import model.DailyLogMap;
 import ui.MemoryHandling;
 import ui.RecoveryApp;
 
@@ -9,6 +7,9 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.File;
+import java.io.IOException;
+import java.time.LocalDate;
 
 public class RecoveryTraceApp extends JFrame implements ActionListener {
     private JMenuBar menuBar;
@@ -22,9 +23,12 @@ public class RecoveryTraceApp extends JFrame implements ActionListener {
     private JButton historyVisualize;
     private DailyLogVisualization dailyLogVisualization;
 
-    private int height = PanelSizes.RECOVERY_APP.getHeight();
-    private int width = PanelSizes.RECOVERY_APP.getWidth();
-    private Font font = new Font("SansSerif", Font.PLAIN, 18);
+    private Font font = new Font("SansSerif", Font.BOLD, 22);
+
+    private int titleHeight;
+    private int dailyLogWidth;
+    private int dailyLogHeight;
+    private int optionsWidth;
 
     private RecoveryApp recoveryApp;
     private MemoryHandling memoryHandling;
@@ -37,18 +41,12 @@ public class RecoveryTraceApp extends JFrame implements ActionListener {
         optionsSetup();
         dailyLogSetup();
         titleSetup();
-
-        System.out.println(dailyLogVisualization.getWidth());
-        System.out.println(title.getWidth());
-        title.setLocation(0,0);
-        dailyLogVisualization.setBounds(0,22,
-                dailyLogVisualization.getWidth(), dailyLogVisualization.getHeight());
-        recoveryAppOptions.setBounds(this.getWidth() - recoveryAppOptions.getWidth(), 0,
-                recoveryAppOptions.getWidth(), this.getHeight());
+        placeItems();
 
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        this.setLayout(new GridLayout(4,4));
-        this.setPreferredSize(new Dimension(600,800));
+        this.setLayout(null);
+        this.getContentPane().setPreferredSize(
+                new Dimension(dailyLogWidth + optionsWidth, titleHeight + dailyLogHeight));
         this.setVisible(true);
 
         this.add(title);
@@ -56,6 +54,29 @@ public class RecoveryTraceApp extends JFrame implements ActionListener {
         this.add(recoveryAppOptions);
         this.pack();
         this.setBackground(Color.lightGray);
+    }
+
+    protected RecoveryApp getRecoveryApp() {
+        return recoveryApp;
+    }
+
+    protected MemoryHandling getMemoryHandling() {
+        return memoryHandling;
+    }
+
+    private void placeItems() {
+        titleHeight = (int) title.getPreferredSize().getHeight();
+        dailyLogWidth = (int) dailyLogVisualization.getPreferredSize().getHeight();
+        dailyLogHeight = (int) dailyLogVisualization.getPreferredSize().getHeight();
+        optionsWidth = (int) recoveryAppOptions.getPreferredSize().getWidth();
+
+        title.setBounds(0, 0,
+                dailyLogWidth,
+                titleHeight);
+        dailyLogVisualization.setBounds(0, 22, dailyLogWidth, dailyLogHeight);
+        recoveryAppOptions.setBounds(dailyLogWidth, 0,
+                (int) recoveryAppOptions.getPreferredSize().getWidth(),
+                dailyLogHeight + titleHeight);
     }
 
     public void menuSetup() {
@@ -107,18 +128,62 @@ public class RecoveryTraceApp extends JFrame implements ActionListener {
         title.setFont(font);
     }
 
+    private void loadRecoveryApp() {
+        int fileChosen; // 0 = yes, 1 = cancel
+        JFileChooser fileChooser = new JFileChooser();
+        fileChooser.setCurrentDirectory(new File("."));
+
+        fileChosen = fileChooser.showOpenDialog(null);
+        try {
+            if (fileChosen == JFileChooser.APPROVE_OPTION) {
+                File file = new File(fileChooser.getSelectedFile().getPath());
+                memoryHandling.loadRuntimeFrom(file);
+            }
+        } catch (IOException e) {
+            System.out.println("Unable to read from file: " + memoryHandling.getRecoveryAddress());
+        }
+    }
+
+    // EFFECTS:     Launches new window allow user to select data,
+    //              if canceled without selection does nothing
+    //              else changes date to selected one
+    private void launchSwitchDateFrame() {
+        new SwitchDateFrame(this);
+    }
+
+    // MODIFIES:    this
+    // EFFECTS:     changes active date to selectedDate,
+    //              rebuilds DailyLogVisualization to new active date
+    protected void switchDate(LocalDate selectedDate) {
+        recoveryApp.setActiveDate(selectedDate);
+        rebuild();
+    }
+
+    // MODIFIES:    this
+    // EFFECTS:     rebuilds RecoveryTraceApp updating output to that of active DailyLog
+    private void rebuild() {
+        //!!! Stub
+    }
+
+    // EFFECTS:     Launches new window with tabs for various visualizations of data
+    private void launchVisualizationWindow() {
+        // stub
+    }
+
     @Override
     public void actionPerformed(ActionEvent e) {
         if (e.getSource() == loadRecoveryApp) {
-            // stub
+            loadRecoveryApp();
         } else if (e.getSource() == saveRecoveryApp) {
-            //stub
+            memoryHandling.saveRuntime();
         } else if (e.getSource() == saveAsRecoveryApp) {
             //stub
         } else if (e.getSource() == changeDate) {
+            launchSwitchDateFrame();
             recoveryApp.print();
         } else if (e.getSource() == historyVisualize) {
-            //stub
+            launchVisualizationWindow();
+            recoveryApp.printMap();
         } else {
             System.out.println("unhandled event");
         }

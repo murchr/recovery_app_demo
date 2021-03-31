@@ -1,16 +1,21 @@
 package ui.console;
 
 import exceptions.OutOfRange;
-import model.DailyLog;
-import model.DailyLogMap;
 import model.entries.ExerciseEntry;
-import model.lists.LogList;
-import model.entries.LogEntry;
 import model.entries.WeightEntry;
-import persistence.*;
+import ui.MemoryHandling;
+import ui.RecoveryApp;
+import ui.gui.DailyLogVisualization;
+import ui.gui.PanelSizes;
+import ui.gui.entries.ExerciseVisualization;
+import ui.gui.entries.WeightVisualization;
+import ui.gui.list.ExerciseListVisualization;
+import ui.gui.list.LogListPanel;
+import ui.gui.list.WeightListVisualization;
 
 import javax.swing.*;
-import java.io.FileNotFoundException;
+import java.awt.*;
+import java.io.File;
 import java.io.IOException;
 import java.time.LocalDate;
 import java.time.format.DateTimeParseException;
@@ -18,44 +23,38 @@ import java.util.Scanner;
 
 public class RecoveryTraceAppConsole extends JFrame {
     private Scanner input;
-    private JsonRecoveryWriter jsonRecoveryWriter;
-    private JsonRecoveryReader jsonRecoveryReader;
-    private JsonAddressWriter jsonAddressWriter;
-    private JsonAddressReader jsonAddressReader;
-    private static final String LAST_JSON = "./data/lastRecoveryTraceAddress.json";
-    private static final String DEFAULT_JSON = "./data/defaultRecoveryTrace.json";
 
-    private DailyLog dailyLog;
-    private DailyLogMap historicalLog;
-    private LocalDate activeDate;
-    private String user;
-    private Addresses addresses;
     private DisplayOptions displayOptions;
 
-    private static final boolean SUPPRESS_CONSOLE = false;
+    private RecoveryApp recoveryApp;
+    private MemoryHandling memoryHandling;
 
+    private JFrame testFrame;
 
     // EFFECTS: runs the RecoveryTraceApp
     public RecoveryTraceAppConsole() {
         String startCommand;
         displayOptions = new DisplayOptions();
+        recoveryApp = new RecoveryApp();
+        memoryHandling = new MemoryHandling(recoveryApp);
+        testFrame = new JFrame();
 
         input = new Scanner(System.in);
-        initializeAddress();
+        memoryHandling.initializeAddress();
         displayOptions.displayLoadOptions();
 
         startCommand = input.next();
         startCommand = startCommand.toLowerCase();
 
         // test addresses
-        System.out.println("last file:" + addresses.getRecoveryAddress());
-        System.out.println("preferences:" + addresses.getPreferencesAddress());
+        System.out.println("last file:" + memoryHandling.getRecoveryAddress());
+        System.out.println("preferences:" + memoryHandling.getPreferencesAddress());
 
         try {
             processLoadOptions(startCommand);
             runRecoveryTrace();
         } catch (IOException e) {
-            System.out.println("Unable to read from file: " + addresses.getRecoveryAddress());
+            System.out.println("Unable to read from file: " + memoryHandling.getRecoveryAddress());
         }
     }
 
@@ -64,60 +63,29 @@ public class RecoveryTraceAppConsole extends JFrame {
     ///////////////////////
 
     // MODIFIES: this
-    // EFFECTS: initializes RecoveryTraceApp location for storing previous save Address location
-    private void initializeAddress() {
-        try {
-            jsonAddressWriter = new JsonAddressWriter(LAST_JSON);
-            jsonAddressReader = new JsonAddressReader(LAST_JSON);
-            addresses = jsonAddressReader.read();
-        } catch (IOException e) {
-            System.out.println("Unable to read from file: " + LAST_JSON);
-        }
-    }
-
-
-    // MODIFIES: this
     // EFFECTS: processes user startCommand
     private void processLoadOptions(String startCommand) throws IOException {
         switch (startCommand) {
             case "l":
-                loadRuntimeFrom();
+                memoryHandling.loadRuntimeFrom(getSourceFile());
                 break;
             case "n":
-                loadRuntimeDefault();
+                memoryHandling.loadRuntimeDefault(setUser());
                 break;
             default:
-                loadRuntimeLast();
+                memoryHandling.loadRuntimeLast();
                 break;
         }
     }
 
     // MODIFIES:    this
     // EFFECTS:     loads historicalLog, activeDate, and user from user determined file
-    private void loadRuntimeFrom() throws IOException {
+    private File getSourceFile() {
         String source;
         System.out.println("Enter the FileName as seen in: \"./data/FileName.json\":");
         System.out.println("e.g. FileName (do not include path or .json");
         source = input.next();
-
-        addresses.setRecoveryAddress("./data/" + source + ".json");
-
-        loadRuntime(addresses.getRecoveryAddress());
-    }
-
-    // MODIFIES:    this
-    // EFFECTS:     creates new historicalLog, sets activeDate to current, retrieves new user,
-    //              and changes last accessed file to default
-    private void loadRuntimeDefault() throws IOException {
-        addresses.setRecoveryAddress(DEFAULT_JSON);
-        activeDate = LocalDate.now();
-
-        initialize(DEFAULT_JSON);
-
-        user = setUser();
-        historicalLog = new DailyLogMap();
-        dailyLog = new DailyLog(activeDate);
-        storeDay();
+        return new File("./data/" + source + ".json");
     }
 
     // EFFECTS: sets user to entered name
@@ -126,32 +94,6 @@ public class RecoveryTraceAppConsole extends JFrame {
         input.useDelimiter("\n");
         System.out.println("Enter your username");
         return input.next();
-    }
-
-    // MODIFIES:    this
-    // EFFECTS:     loads historicalLog, activeDate, and user from last accessed file
-    private void loadRuntimeLast() throws IOException {
-        loadRuntime(addresses.getRecoveryAddress());
-    }
-
-    // MODIFIES:    this
-    // EFFECTS:     initialize jsonRecovery read and write, loads historicalLog from source file
-    private void loadRuntime(String source) throws IOException {
-        initialize(source);
-
-        historicalLog = jsonRecoveryReader.readDailyLogMap();
-        activeDate = jsonRecoveryReader.readActiveDay();
-        user = jsonRecoveryReader.readUser();
-
-        dailyLog = historicalLog.get(activeDate);
-        System.out.println("Loaded " + user + " from " + addresses.getRecoveryAddress());
-    }
-
-    // MODIFIES: this
-    // EFFECTS: initializes RecoveryTraceApp for reading and writing to file from source
-    private void initialize(String source) throws IOException {
-        jsonRecoveryWriter = new JsonRecoveryWriter(source);
-        jsonRecoveryReader = new JsonRecoveryReader(source);
     }
 
     ///////////////////////
@@ -175,7 +117,6 @@ public class RecoveryTraceAppConsole extends JFrame {
             } else {
                 processCommand(command);
             }
-
         }
     }
 
@@ -202,6 +143,9 @@ public class RecoveryTraceAppConsole extends JFrame {
             case "m":
                 memoryHandling();
                 break;
+            case "c":
+                clearFrame();
+                break;
             default:
                 System.out.println("Selection not valid");
                 break;
@@ -222,13 +166,34 @@ public class RecoveryTraceAppConsole extends JFrame {
             case "t":
                 totalExerciseOn();
                 break;
+            case "e":
+                recoveryApp.printExercise();
+                //launchFrame(new ExerciseListVisualization(recoveryApp.getDailyLog().getExerciseLog()));
+                launchFrame(new
+                        LogListPanel("Exercise Log",
+                        new ExerciseListVisualization(recoveryApp.getDailyLog().getExerciseLog())));
+                break;
+            case "a":
+                averageWeight();
+                break;
+            case "w":
+                recoveryApp.printWeight();
+                //launchFrame(new WeightListVisualization(recoveryApp.getDailyLog().getWeightLog()));
+                launchFrame(new
+                        LogListPanel("Weight Log",
+                        new WeightListVisualization(recoveryApp.getDailyLog().getWeightLog())));
+                break;
             case "p":
-                displayExercises();
+                recoveryApp.printMap();
+                break;
+            case "d":
+                launchFrame(new DailyLogVisualization(recoveryApp.getDailyLog()));
                 break;
             default:
                 System.out.println("Selection not valid");
                 break;
         }
+        System.out.println("\n");
     }
 
     private void memoryHandling() {
@@ -240,11 +205,14 @@ public class RecoveryTraceAppConsole extends JFrame {
 
     private void processMemory(String command) {
         switch (command) {
-            case "s": saveRuntime();
+            case "s":
+                memoryHandling.saveRuntime();
                 break;
-            case "l": handleLoadRuntimeFrom();
+            case "l":
+                handleLoadRuntimeFrom();
                 break;
-            default: System.out.println("Selection not valid");
+            default:
+                System.out.println("Selection not valid");
                 break;
         }
     }
@@ -258,11 +226,14 @@ public class RecoveryTraceAppConsole extends JFrame {
 
     private void processEntry(String command) {
         switch (command) {
-            case "e": addExerciseEntry();
+            case "e":
+                addExerciseEntry();
                 break;
-            case "w": addWeightEntry();
+            case "w":
+                addWeightEntry();
                 break;
-            default: System.out.println("Selection not valid");
+            default:
+                System.out.println("Selection not valid");
                 break;
         }
     }
@@ -285,7 +256,8 @@ public class RecoveryTraceAppConsole extends JFrame {
             System.out.print("\nEnter duration of workout in minutes:\t");
             duration = Integer.parseInt(input.next());
 
-            dailyLog.logNewExercise(new ExerciseEntry(id, type, intensity, duration));
+            recoveryApp.getDailyLog().logNewExercise(new ExerciseEntry(id, type, intensity, duration));
+            launchFrame(new ExerciseVisualization(new ExerciseEntry(id, type, intensity, duration)));
         } catch (NumberFormatException e) {
             System.out.println("Input could not be parsed into correct data type");
         } catch (OutOfRange e) {
@@ -304,7 +276,9 @@ public class RecoveryTraceAppConsole extends JFrame {
             id = Integer.parseInt(input.next());
             System.out.println("\nEnter weight in lbs:\t");
             weight = Double.parseDouble(input.next());
-            dailyLog.logNewWeight(new WeightEntry(id, weight));
+
+            recoveryApp.getDailyLog().logNewWeight(new WeightEntry(id, weight));
+            launchFrame(new WeightVisualization(new WeightEntry(id, weight)));
         } catch (NumberFormatException e) {
             System.out.println("Input could not be parsed into correct data type");
         } catch (OutOfRange e) {
@@ -315,28 +289,19 @@ public class RecoveryTraceAppConsole extends JFrame {
     // EFFECTS: prints the date of the current dailyLog being accessed with formatting
     private void checkDate() {
         System.out.print("Date currently being used is:");
-        printCurrentDate();
+        recoveryApp.printDate();
     }
 
-    // MODIFIES: this
     // EFFECTS: returns total minutes of exercise on current date
     private void totalExerciseOn() {
-        System.out.printf("\nTotal Exercise in current dailyLog is: %d", dailyLog.dailyExerciseTotal());
+        System.out.printf("\nTotal Exercise in current dailyLog is: %d",
+                recoveryApp.getDailyLog().dailyExerciseTotal());
     }
 
-    // MODIFIES: this
-    // EFFECTS: displays exercises of current entry
-    private void displayExercises() {
-        ExerciseEntry exerciseEntry;
-        LogList exercisesLog = dailyLog.getExerciseLog();
-
-        for (LogEntry logEntry : exercisesLog) {
-            exerciseEntry = (ExerciseEntry) logEntry;
-            System.out.printf("\nentryId %d, Exercise Type: %s, Exercise Intensity: %d, Exercise duration: %d",
-                    exerciseEntry.getEntryId(), exerciseEntry.getExerciseType(), exerciseEntry.getIntensity(),
-                    exerciseEntry.getDuration());
-        }
-        System.out.print("\n");
+    // EFFECTS: returns average weight of current entry
+    private void averageWeight() {
+        System.out.println("Average weight today:");
+        recoveryApp.getDailyLog().getWeightLog().summary();
     }
 
     // MODIFIES: this
@@ -346,7 +311,7 @@ public class RecoveryTraceAppConsole extends JFrame {
 
         System.out.println("Enter entryId of exercise you wish to remove:");
         exerciseId = Integer.parseInt(input.next());
-        dailyLog.removeExercise(exerciseId);
+        recoveryApp.getDailyLog().removeExercise(exerciseId);
     }
 
     // MODIFIES: this
@@ -357,21 +322,16 @@ public class RecoveryTraceAppConsole extends JFrame {
         LocalDate d;
 
         System.out.print("\n Enter date with following format (YYYY-MM-DD):");
-        printCurrentDate();
+        recoveryApp.printDate();
         command = input.next();
         try {
             command = formatDate(command);
             d = LocalDate.parse(command);
-            storeDay();
-            dailyLog = historicalLog.get(d);
-            activeDate = d;
-            if (dailyLog == null) {
-                dailyLog = new DailyLog(d);
-                historicalLog.put(dailyLog);
-            }
+
+            recoveryApp.changeDate(d);
 
             System.out.print("Day successfully changed to ");
-            printCurrentDate();
+            recoveryApp.printDate();
         } catch (DateTimeParseException e) {
             System.out.println("Input is not a valid day");
         }
@@ -397,59 +357,42 @@ public class RecoveryTraceAppConsole extends JFrame {
         return String.format("%4d-%02d-%02d", year, month, day);
     }
 
-    // EFFECTS:     saves active DailyLog and DailyLogMap to file
-    // modeled after JsonSerializationDemo
-    private void saveRuntime() {
-        storeDay();
-
-        try {
-            jsonRecoveryWriter.open();
-            jsonRecoveryWriter.write(user, activeDate, historicalLog);
-            jsonRecoveryWriter.close();
-            System.out.println("Saved DailyLog and DailyLogMap to" + addresses.getRecoveryAddress());
-            saveAddress();
-        } catch (FileNotFoundException e) {
-            System.out.println("Unable to write to file: " + addresses.getRecoveryAddress());
-        }
-    }
-
-    // EFFECTS:     saves active address to lastRecoveryTraceAddress
-    private void saveAddress() {
-        try {
-            jsonAddressWriter.open();
-            jsonAddressWriter.write(addresses);
-            jsonAddressWriter.close();
-            System.out.println("Saved recovery address to" + LAST_JSON);
-        } catch (FileNotFoundException e) {
-            System.out.println("Unable to write to file: " + LAST_JSON);
-        }
-    }
-
     private void handleLoadRuntimeFrom() {
         try {
-            loadRuntimeFrom();
+            processLoadOptions("l");
         } catch (IOException e) {
-            System.out.println("Unable to read from file: " + addresses.getRecoveryAddress());
+            System.out.println("Unable to read from file: " + memoryHandling.getRecoveryAddress());
         }
     }
 
-
-    // EFFECTS: prints the date of the current dailyLog being accessed
-    private void printCurrentDate() {
-        printDate(dailyLog.getLogDate());
+    private void clearFrame() {
+        testFrame.dispose();
+        testFrame.removeAll();
+        testFrame.pack();
+        testFrame.setVisible(true);
+        //launchFrame(null);
     }
 
-    // EFFECTS: prints the date of the current dailyLog being accessed
-    private void printDate(LocalDate localDate) {
-        System.out.printf("\t %4d-%02d-%02d\n",
-                localDate.getYear(), localDate.getMonthValue(), localDate.getDayOfMonth());
-    }
+    private void launchFrame(JPanel panel) {
+        testFrame.dispose();
+        int frameEdge = 50;
 
+        testFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        testFrame.setLayout(null);
+        testFrame.getContentPane().setPreferredSize(
+                new Dimension((int) panel.getPreferredSize().getWidth() + 2 * frameEdge,
+                        (int) panel.getPreferredSize().getHeight() + 2 * frameEdge));
+        panel.setBounds(frameEdge, frameEdge,
+                (int) panel.getPreferredSize().getWidth(),
+                (int) panel.getPreferredSize().getHeight());
+        testFrame.getContentPane().setBackground(Color.black);
+        testFrame.add(panel);
+        testFrame.pack();
+        testFrame.setVisible(true);
 
-    // MODIFIES:    this
-    // EFFECT:      if no entry exists in historicalLog for day of someDailyLog, adds dailyLog to historicalLog indexed
-    //              by date, otherwise overwrites existing entry for day of someDailyLog
-    private void storeDay() {
-        historicalLog.put(dailyLog);
+        System.out.println("testFrame Preferred Size");
+        System.out.println(testFrame.getPreferredSize().getWidth());
+        System.out.println(testFrame.getPreferredSize().getHeight());
+        testFrame.setResizable(false);
     }
 }

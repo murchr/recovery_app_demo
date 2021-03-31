@@ -13,15 +13,12 @@ public class WeightListVisualization extends LogListVisualization {
 
     public WeightListVisualization(WeightList weightList) {
         super();
-        name = new JLabel();
-        name.setText("Weight Log:");
-        name.setFont(new Font("SansSerif", Font.BOLD, 22));
-        name.setLocation(0,0);
 
         for (LogEntry weightEntry : weightList) {
-            WeightVisualization wv = new WeightVisualization((WeightEntry)weightEntry);
+            WeightVisualization wv = new WeightVisualization((WeightEntry) weightEntry);
             visualizationEntries.add(wv);
             height += wv.getHeight();
+            entries++;
         }
 
         this.setBackground(Color.cyan);
@@ -31,11 +28,13 @@ public class WeightListVisualization extends LogListVisualization {
     @Override
     public void addEntry(EntryVisualization ev) {
         // stub
+        entries++;
     }
 
     @Override
     public void removeEntry(EntryVisualization ev) {
         // stub
+        entries--;
     }
 
     @Override

@@ -6,37 +6,69 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 public class LogListPanel extends JPanel implements ActionListener {
+    protected JLabel name;
     private LogListVisualization logListPanel;
     private LogOptionPanel buttonPanel;
     protected JButton addEntry;
     protected JButton removeEntry;
     protected JButton modifyEntry;
 
-    public LogListPanel(LogListVisualization logListPanel) {
+    public LogListPanel(String listType, LogListVisualization logListPanel) {
         this.logListPanel = logListPanel;
 
+        initializeButtons();
+
+        name = new JLabel();
+        name.setText(listType + ":");
+        name.setFont(new Font("SansSerif", Font.BOLD, 22));
+
+        defineItemBounds();
+
+        this.setPreferredSize(new Dimension((int) this.logListPanel.getPreferredSize().getWidth()
+                + (int) buttonPanel.getPreferredSize().getWidth(),
+                (int) (this.logListPanel.getPreferredSize().getHeight() + name.getPreferredSize().getHeight())));
+
+        this.setBackground(Color.white);
+        this.setLayout(null);
+        this.add(name);
+        this.add(this.logListPanel);
+        this.add(buttonPanel);
+    }
+
+    private void defineItemBounds() {
+        int logListPanelHeight = (int) logListPanel.getPreferredSize().getHeight();
+        int buttonPanelHeight = (int) buttonPanel.getPreferredSize().getHeight();
+        int nameHeight = (int) name.getPreferredSize().getHeight();
+        name.setBounds(0, 0,
+                (int) logListPanel.getPreferredSize().getWidth(),
+                nameHeight);
+        if ((logListPanelHeight + nameHeight) >= buttonPanelHeight) {
+            logListPanel.setBounds(0, (int) name.getPreferredSize().getHeight(),
+                    (int) logListPanel.getPreferredSize().getWidth(),
+                    logListPanelHeight);
+            buttonPanel.setBounds((int) logListPanel.getPreferredSize().getWidth(), 0,
+                    (int) buttonPanel.getPreferredSize().getWidth(),
+                    (int) (logListPanelHeight + name.getPreferredSize().getHeight()));
+        } else {
+            logListPanel.setBounds(0, (int) name.getPreferredSize().getHeight(),
+                    (int) logListPanel.getPreferredSize().getWidth(),
+                    buttonPanelHeight);
+            buttonPanel.setBounds((int) logListPanel.getPreferredSize().getWidth(), 0,
+                    (int) buttonPanel.getPreferredSize().getWidth(),
+                    buttonPanelHeight + nameHeight);
+        }
+    }
+
+    private void initializeButtons() {
         addEntry = new JButton();
         removeEntry = new JButton();
         modifyEntry = new JButton();
-
-        this.add(addEntry);
-        this.add(removeEntry);
-        this.add(modifyEntry);
 
         addEntry.addActionListener(this);
         removeEntry.addActionListener(this);
         modifyEntry.addActionListener(this);
 
         buttonPanel = new LogOptionPanel(addEntry, removeEntry, modifyEntry);
-        buttonPanel.setSize(new Dimension(buttonPanel.getWidth(), logListPanel.getHeight()));
-        this.setSize(new Dimension(this.logListPanel.getWidth() + buttonPanel.getWidth(),
-                logListPanel.getHeight()));
-
-        logListPanel.setLocation(0, 0);
-        buttonPanel.setLocation(logListPanel.getWidth(), 0);
-
-        this.add(this.logListPanel);
-        this.add(buttonPanel);
     }
 
     // MODIFIES: this

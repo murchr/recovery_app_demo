@@ -1,6 +1,5 @@
 package ui;
 
-import model.DailyLog;
 import model.DailyLogMap;
 import persistence.*;
 
@@ -53,10 +52,7 @@ public class MemoryHandling {
 
         initialize(DEFAULT_JSON);
 
-        recoveryApp.setUser(user);
-        recoveryApp.setDailyLogMap(new DailyLogMap());
-        recoveryApp.setDailyLog(new DailyLog(recoveryApp.getActiveDate()));
-        recoveryApp.storeDay();
+        recoveryApp.initialize(user, recoveryApp.getActiveDate(), new DailyLogMap());
     }
 
     // MODIFIES:    this
@@ -70,9 +66,9 @@ public class MemoryHandling {
     private void loadRuntime(String source) throws IOException {
         initialize(source);
 
-        recoveryApp.setDailyLogMap(jsonRecoveryReader.readDailyLogMap());
-        recoveryApp.setUser(jsonRecoveryReader.readUser());
-        recoveryApp.setActiveDate(jsonRecoveryReader.readActiveDay()); // tied to active dailyLog
+        recoveryApp.initialize(jsonRecoveryReader.readUser(),
+                jsonRecoveryReader.readActiveDay(),
+                jsonRecoveryReader.readDailyLogMap());
 
         System.out.println("Loaded " + recoveryApp.getUser() + " from " + addresses.getRecoveryAddress());
     }
@@ -113,7 +109,11 @@ public class MemoryHandling {
         }
     }
 
-    public Addresses getRecoveryAddresses() {
-        return addresses;
+    public String getRecoveryAddress() {
+        return addresses.getRecoveryAddress();
+    }
+
+    public String getPreferencesAddress() {
+        return addresses.getPreferencesAddress();
     }
 }

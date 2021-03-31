@@ -8,9 +8,9 @@ import java.awt.*;
 public class LogOptionPanel extends JPanel {
     private int width = PanelSizes.LOG_LIST_BUTTON.getWidth();
     private int height = PanelSizes.LOG_LIST_BUTTON.getHeight();
-    //private int buttonWidth = width - 10;
-    //private int buttonHeight = width / 4;
-   // private Dimension buttonDimension = new Dimension(buttonWidth, buttonHeight);
+    private int buttonWidth = width - 10;
+    private int buttonHeight = width / 4;
+    private Dimension buttonDimension = new Dimension(buttonWidth, buttonHeight);
     protected Font font = new Font("SansSerif", Font.PLAIN, 18);
     protected JButton addEntry;
     protected JButton removeEntry;
@@ -23,9 +23,9 @@ public class LogOptionPanel extends JPanel {
         this.removeEntry = removeEntry;
         this.modifyEntry = modifyEntry;
 
-        //this.addEntry.setSize(buttonDimension);
-        //this.modifyEntry.setSize(buttonDimension);
-        //this.removeEntry.setSize(buttonDimension);
+        this.addEntry.setPreferredSize(buttonDimension);
+        this.modifyEntry.setPreferredSize(buttonDimension);
+        this.removeEntry.setPreferredSize(buttonDimension);
 
         this.addEntry.setText("Add");
         this.removeEntry.setText("Remove");
@@ -39,12 +39,11 @@ public class LogOptionPanel extends JPanel {
         modifyEntry.setAlignmentX(Component.CENTER_ALIGNMENT);
         removeEntry.setAlignmentX(Component.CENTER_ALIGNMENT);
 
+        this.setBackground(Color.darkGray);
         this.add(addEntry);
         this.add(removeEntry);
         this.add(modifyEntry);
         this.setSize(new Dimension(width, height));
-        //System.out.println(buttonWidth);
-        //System.out.println(buttonHeight);
-        this.setVisible(true);
+        this.setPreferredSize(new Dimension(width, height));
     }
 }

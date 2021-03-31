@@ -5,9 +5,11 @@ import model.DailyLogMap;
 import model.entries.ExerciseEntry;
 import model.entries.LogEntry;
 import model.entries.WeightEntry;
+import model.lists.ExerciseList;
 import model.lists.WeightList;
 
 import java.time.LocalDate;
+import java.util.Collection;
 
 public class RecoveryApp {
     private DailyLog dailyLog;
@@ -22,8 +24,7 @@ public class RecoveryApp {
         historicalLog = new DailyLogMap();
     }
 
-    /*
-    public RecoveryApp(String user, LocalDate activeDate, DailyLogMap historicalLog) {
+    public void initialize(String user, LocalDate activeDate, DailyLogMap historicalLog) {
         this.user = user;
         this.activeDate = activeDate;
         this.historicalLog = historicalLog;
@@ -35,8 +36,6 @@ public class RecoveryApp {
             storeDay();
         }
     }
-    */
-
 
     ///////////////////////
     /*      GETTERS      */
@@ -62,14 +61,10 @@ public class RecoveryApp {
     /*      SETTERS      */
     ///////////////////////
 
+    // EFFECTS: sets active date to date, stores active DailyLog and replaces it with one representing date
     public void setActiveDate(LocalDate date) {
         this.activeDate = date;
-        if (historicalLog.containsKey(date)) {
-            this.dailyLog = historicalLog.get(date);
-        } else {
-            this.dailyLog = new DailyLog(date);
-            storeDay();
-        }
+        changeDate(date);
     }
 
     public void setDailyLogMap(DailyLogMap dailyLogMap) {
@@ -80,6 +75,7 @@ public class RecoveryApp {
         this.user = user;
     }
 
+    // EFFECTS: sets active DailyLog to dailyLog, then sets activeDate to dailyLog's stored date
     public void setDailyLog(DailyLog dailyLog) {
         this.dailyLog = dailyLog;
         this.activeDate = dailyLog.getLogDate();
@@ -90,14 +86,14 @@ public class RecoveryApp {
     // MODIFIES:    this
     // EFFECT:      if no entry exists in historicalLog for day of someDailyLog, adds dailyLog to historicalLog indexed
     //              by date, otherwise overwrites existing entry for day of someDailyLog
-    protected void storeDay() {
+    public void storeDay() {
         historicalLog.put(dailyLog);
     }
 
     // MODIFIES: this
     // EFFECTS: stores current dailyEntry in historicalLog then replaces it with user entered LocalDate,
     //          if no entry exists of LocalDate creates new DailyLog of user entered date
-    private void changeDate(LocalDate newDate) {
+    public void changeDate(LocalDate newDate) {
         storeDay();
         dailyLog = historicalLog.get(newDate);
         activeDate = newDate;
@@ -108,20 +104,59 @@ public class RecoveryApp {
     }
 
     public void print() {
+        printUser();
+        printDate();
+        printExercise();
+        printWeight();
+    }
+
+    public void printMap() {
+        Collection<DailyLog> entries = historicalLog.values();
+        printUser();
+        for (DailyLog dailyLog : entries) {
+            printDate(dailyLog);
+            printExercise(dailyLog);
+            printWeight(dailyLog);
+            System.out.println("");
+        }
+    }
+
+    public void printUser() {
         System.out.println(user);
-        System.out.println(activeDate.toString());
+    }
+
+    public void printDate() {
+        printDate(dailyLog);
+    }
+
+    private void printDate(DailyLog dailyLog) {
+        System.out.println(dailyLog.getLogDate().toString());
+    }
+
+    public void printExercise() {
+        printExercise(dailyLog);
+    }
+
+    private void printExercise(DailyLog dailyLog) {
+        System.out.println("\tExercise List:");
         for (LogEntry ee : dailyLog.getExerciseLog()) {
             ExerciseEntry exerciseEntry = (ExerciseEntry) ee;
-            System.out.printf("\nentryId %d, Exercise Type: %s, Exercise Intensity: %d, Exercise duration: %d",
+            System.out.printf("\t\tentryId %d, Exercise Type: %s, Exercise Intensity: %d, Exercise duration: %d\n",
                     exerciseEntry.getEntryId(), exerciseEntry.getExerciseType(), exerciseEntry.getIntensity(),
                     exerciseEntry.getDuration());
         }
-        System.out.println("end exercises");
+    }
+
+    public void printWeight() {
+        printWeight(dailyLog);
+    }
+
+    private void printWeight(DailyLog dailyLog) {
+        System.out.println("\tWeight List:");
         for (LogEntry we : dailyLog.getWeightLog()) {
             WeightEntry weightEntry = (WeightEntry) we;
-            System.out.printf("\nentryId %d, weight: %s",
+            System.out.printf("\t\tentryId %d, weight: %s\n",
                     weightEntry.getEntryId(), weightEntry.getWeight());
         }
-        System.out.println("end weights");
     }
 }

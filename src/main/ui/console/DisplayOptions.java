@@ -19,6 +19,7 @@ public class DisplayOptions {
         System.out.println("\tr -> remove Exercise entry by entryId in current dailyLog");
         System.out.println("\tx -> switch active dailyLog with existing dailyLog in dailyLogMap");
         System.out.println("\tm -> memory handling for dailyLogMap (save and load)");
+        System.out.println("\tc -> clear Frame");
         System.out.println("\tq -> quit");
     }
 
@@ -26,7 +27,11 @@ public class DisplayOptions {
     protected void displayVisualizeMenu() {
         System.out.println("\nSelect from:");
         System.out.println("\tt -> get total exercise time today");
-        System.out.println("\tp -> print exercise entries of current dailyLog");
+        System.out.println("\te -> print exercise entries of current dailyLog");
+        System.out.println("\ta -> get average weight today");
+        System.out.println("\tw -> print weight entries of current dailyLog");
+        System.out.println("\td -> Display Active DailyLog");
+        System.out.println("\tp -> print map of all dailyLog entries");
     }
 
     // EFFECTS: prints options for user to handle memory with RecoveryTraceApp

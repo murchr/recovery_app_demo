@@ -10,13 +10,14 @@ import java.util.ArrayList;
 public abstract class LogListVisualization extends JPanel {
     protected final int width = PanelSizes.LOG_LIST.getWidth();
     protected int height = PanelSizes.LOG_LIST.getHeight();
+    protected int entries = 0;
     protected ArrayList<EntryVisualization> visualizationEntries;
-    protected JLabel name;
 
     public LogListVisualization() {
         this.setLayout(new FlowLayout());
         this.setVisible(true);
         this.setPreferredSize(new Dimension(width, height));
+        //this.setMinimumSize(new Dimension(width, height));
         visualizationEntries = new ArrayList<>();
     }
 
@@ -26,13 +27,20 @@ public abstract class LogListVisualization extends JPanel {
         this.removeAll();
         height = PanelSizes.LOG_LIST.getHeight();
 
-        this.add(name);
         for (EntryVisualization ev : visualizationEntries) {
             this.add(ev);
-            height += ev.getHeight();
+            height += ev.getPreferredSize().getHeight();
         }
 
         this.setPreferredSize(new Dimension(width, height));
+        //this.setMinimumSize(new Dimension(width, height));
+
+        //this.setLayout(new GridBagLayout());
+        if (entries > 0) {
+            this.setLayout(new GridLayout(entries, 0));
+        } else {
+            this.setLayout(new GridLayout(1, 0));
+        }
     }
 
     // MODIFIES: this

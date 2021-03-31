@@ -15,7 +15,28 @@
                 "year": 2021,
                 "day": 4
             },
-            "exerciseLog": [],
+            "exerciseLog": [
+                {
+                    "intensity": 10,
+                    "duration": 5,
+                    "entryTime": {
+                        "hour": 15,
+                        "minute": 52
+                    },
+                    "exerciseType": "worm",
+                    "entryId": 1
+                },
+                {
+                    "intensity": 10,
+                    "duration": 20,
+                    "entryTime": {
+                        "hour": 15,
+                        "minute": 52
+                    },
+                    "exerciseType": "HardWorm",
+                    "entryId": 2
+                }
+            ],
             "weightLog": []
         },
         {
@@ -139,8 +160,8 @@
     ],
     "activeDate": {
         "month": 3,
-        "year": 2020,
-        "day": 6
+        "year": 2021,
+        "day": 4
     },
     "user": "Ryan Murch"
 }

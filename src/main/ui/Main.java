@@ -1,9 +1,11 @@
 package ui;
 
-import ui.gui.LaunchOptions;
+import ui.console.RecoveryTraceAppConsole;
+import ui.gui.LaunchHandler;
 
 public class Main {
     public static void main(String[] args) {
-        new LaunchOptions();
+        //new RecoveryTraceAppConsole();
+        new LaunchHandler();
     }
 }

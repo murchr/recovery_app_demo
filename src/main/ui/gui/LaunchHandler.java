@@ -10,7 +10,7 @@ import java.awt.event.ActionListener;
 import java.io.File;
 import java.io.IOException;
 
-public class LaunchOptions extends JFrame implements ActionListener {
+public class LaunchHandler extends JFrame implements ActionListener {
     private JButton loadPrevious;
     private JButton loadFromFile;
     private JButton newUser;
@@ -20,13 +20,13 @@ public class LaunchOptions extends JFrame implements ActionListener {
     private RecoveryApp recoveryApp;
     private MemoryHandling memoryHandling;
 
-    public LaunchOptions() {
+    public LaunchHandler() {
         recoveryApp = new RecoveryApp();
         memoryHandling = new MemoryHandling(recoveryApp);
 
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        this.setPreferredSize(new Dimension(300,400));
-        this.setLayout(new GridLayout(3,0));
+        this.setPreferredSize(new Dimension(300, 400));
+        this.setLayout(new GridLayout(3, 0));
 
         buttonSetup();
 
@@ -105,7 +105,7 @@ public class LaunchOptions extends JFrame implements ActionListener {
 
         } catch (IOException exc) {
             System.out.println("Unable to read from file: "
-                    + memoryHandling.getRecoveryAddresses().getRecoveryAddress());
+                    + memoryHandling.getRecoveryAddress());
         } finally {
             this.dispose();
         }
