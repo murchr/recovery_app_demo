@@ -15,7 +15,9 @@ public abstract class LogListPanel extends JPanel implements ActionListener {
     protected JButton addEntry;
     protected JButton removeEntry;
     protected JButton modifyEntry;
+    protected JButton summaryStat;
     protected LogList logList;
+    protected Font font = new Font("SansSerif", Font.PLAIN, 18);
     protected int currID = 1;
 
     public LogListPanel(String listType, LogListVisualization logListVisualization, LogList logList) {
@@ -76,12 +78,14 @@ public abstract class LogListPanel extends JPanel implements ActionListener {
         addEntry = new JButton();
         removeEntry = new JButton();
         modifyEntry = new JButton();
+        summaryStat = new JButton();
 
         addEntry.addActionListener(this);
         removeEntry.addActionListener(this);
         modifyEntry.addActionListener(this);
+        summaryStat.addActionListener(this);
 
-        buttonPanel = new LogOptionPanel(addEntry, removeEntry, modifyEntry);
+        buttonPanel = new LogOptionPanel(addEntry, removeEntry, modifyEntry, summaryStat);
     }
 
     // MODIFIES: this
@@ -97,6 +101,9 @@ public abstract class LogListPanel extends JPanel implements ActionListener {
     //          new window for user to create new log of desired type with with data filled in
     protected abstract void modifyEntry();
 
+    // EFFECTS:     displays summary statistic with image
+    protected abstract void launchSummary();
+
     @Override
     public void actionPerformed(ActionEvent e) {
         if (e.getSource() == addEntry) {
@@ -105,6 +112,8 @@ public abstract class LogListPanel extends JPanel implements ActionListener {
             removeEntry();
         } else if (e.getSource() == modifyEntry) {
             modifyEntry();
+        } else if (e.getSource() == summaryStat) {
+            launchSummary();
         }
     }
 }

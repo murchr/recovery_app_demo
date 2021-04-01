@@ -4,6 +4,8 @@ import ui.gui.PanelSizes;
 
 import javax.swing.*;
 import java.awt.*;
+import java.util.ArrayList;
+import java.util.Collection;
 
 public class LogOptionPanel extends JPanel {
     private int width = PanelSizes.LOG_LIST_BUTTON.getWidth();
@@ -15,35 +17,42 @@ public class LogOptionPanel extends JPanel {
     protected JButton addEntry;
     protected JButton removeEntry;
     protected JButton modifyEntry;
+    protected JButton summaryStat;
 
-    public LogOptionPanel(JButton addEntry, JButton removeEntry, JButton modifyEntry) {
+    public LogOptionPanel(JButton addEntry, JButton removeEntry, JButton modifyEntry, JButton summaryStat) {
         this.setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
+        ArrayList<JButton> buttons = new ArrayList<>();
 
         this.addEntry = addEntry;
         this.removeEntry = removeEntry;
         this.modifyEntry = modifyEntry;
-
-        this.addEntry.setPreferredSize(buttonDimension);
-        this.modifyEntry.setPreferredSize(buttonDimension);
-        this.removeEntry.setPreferredSize(buttonDimension);
+        this.summaryStat = summaryStat;
 
         this.addEntry.setText("Add");
         this.removeEntry.setText("Remove");
         this.modifyEntry.setText("Modify");
+        this.summaryStat.setText("Summary");
 
-        this.addEntry.setFont(font);
-        this.modifyEntry.setFont(font);
-        this.removeEntry.setFont(font);
+        buttons.add(addEntry);
+        buttons.add(removeEntry);
+        buttons.add(modifyEntry);
+        buttons.add(summaryStat);
 
-        addEntry.setAlignmentX(Component.CENTER_ALIGNMENT);
-        modifyEntry.setAlignmentX(Component.CENTER_ALIGNMENT);
-        removeEntry.setAlignmentX(Component.CENTER_ALIGNMENT);
+        initializeButtons(buttons);
 
         this.setBackground(Color.darkGray);
         this.add(addEntry);
         this.add(removeEntry);
         this.add(modifyEntry);
-        //this.setSize(new Dimension(width, height));
+        this.add(summaryStat);
         this.setPreferredSize(new Dimension(width, height));
+    }
+
+    private void initializeButtons(Collection<JButton> buttons) {
+        for (JButton button : buttons) {
+            button.setPreferredSize(buttonDimension);
+            button.setFont(font);
+            button.setAlignmentX(Component.CENTER_ALIGNMENT);
+        }
     }
 }
