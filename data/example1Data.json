@@ -156,12 +156,113 @@
                 "weight": 181,
                 "entryId": 1
             }]
+        },
+        {
+            "date": {
+                "month": 4,
+                "year": 2021,
+                "day": 1
+            },
+            "exerciseLog": [],
+            "weightLog": []
+        },
+        {
+            "date": {
+                "month": 4,
+                "year": 2021,
+                "day": 2
+            },
+            "exerciseLog": [],
+            "weightLog": []
+        },
+        {
+            "date": {
+                "month": 4,
+                "year": 2021,
+                "day": 3
+            },
+            "exerciseLog": [],
+            "weightLog": []
+        },
+        {
+            "date": {
+                "month": 4,
+                "year": 2021,
+                "day": 4
+            },
+            "exerciseLog": [],
+            "weightLog": []
+        },
+        {
+            "date": {
+                "month": 4,
+                "year": 2021,
+                "day": 5
+            },
+            "exerciseLog": [
+                {
+                    "intensity": 7,
+                    "duration": 90,
+                    "entryTime": {
+                        "hour": 9,
+                        "minute": 36
+                    },
+                    "exerciseType": "swimming",
+                    "entryId": 1
+                },
+                {
+                    "intensity": 9,
+                    "duration": 25,
+                    "entryTime": {
+                        "hour": 9,
+                        "minute": 36
+                    },
+                    "exerciseType": "speeed",
+                    "entryId": 2
+                },
+                {
+                    "intensity": 3,
+                    "duration": 45,
+                    "entryTime": {
+                        "hour": 9,
+                        "minute": 37
+                    },
+                    "exerciseType": "Dancing",
+                    "entryId": 3
+                }
+            ],
+            "weightLog": [
+                {
+                    "entryTime": {
+                        "hour": 9,
+                        "minute": 36
+                    },
+                    "weight": 130,
+                    "entryId": 1
+                },
+                {
+                    "entryTime": {
+                        "hour": 9,
+                        "minute": 37
+                    },
+                    "weight": 700,
+                    "entryId": 2
+                },
+                {
+                    "entryTime": {
+                        "hour": 9,
+                        "minute": 38
+                    },
+                    "weight": 35,
+                    "entryId": 4
+                }
+            ]
         }
     ],
     "activeDate": {
-        "month": 3,
+        "month": 4,
         "year": 2021,
-        "day": 4
+        "day": 5
     },
     "user": "Ryan Murch"
 }

@@ -1,9 +1,7 @@
 package ui.gui;
 
 import model.DailyLog;
-import ui.gui.list.ExerciseListVisualization;
-import ui.gui.list.LogListPanel;
-import ui.gui.list.WeightListVisualization;
+import ui.gui.list.*;
 
 import javax.swing.*;
 import java.awt.*;
@@ -49,8 +47,10 @@ public class DailyLogVisualization extends JPanel {
                 localDate.getYear(), localDate.getMonthValue(), localDate.getDayOfMonth()));
         time.setFont(font);
 
-        exerciseLog = new LogListPanel("Exercise Log", new ExerciseListVisualization(dailyLog.getExerciseLog()));
-        weightLog = new LogListPanel("Weight Log", new WeightListVisualization(dailyLog.getWeightLog()));
+        exerciseLog = new ExerciseListPanel("Exercise Log",
+                new ExerciseListVisualization(dailyLog.getExerciseLog()), dailyLog.getExerciseLog());
+        weightLog = new WeightListPanel("Weight Log",
+                new WeightListVisualization(dailyLog.getWeightLog()), dailyLog.getWeightLog());
     }
 
     private void defineItemsBounds() {
@@ -67,6 +67,3 @@ public class DailyLogVisualization extends JPanel {
         }
     }
 }
-
-
-

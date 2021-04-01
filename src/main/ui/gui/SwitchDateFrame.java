@@ -1,6 +1,7 @@
 package ui.gui;
 
 import javax.swing.*;
+import javax.swing.border.EtchedBorder;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -11,32 +12,36 @@ import java.util.Collection;
 
 public class SwitchDateFrame extends JFrame implements ActionListener {
     private LocalDate selectedDate;
-    private RecoveryTraceApp recoveryTraceApp;
-    private Collection<LocalDate> existingDates;
-    private Collection<JLabel> dates;
-    private JLabel prompt;
-    private JTextField textField;
-    private JButton confirm;
-    private Font font = new Font("SansSerif", Font.PLAIN, 18);
+    private final RecoveryTraceApp recoveryTraceApp;
+    private final Collection<LocalDate> existingDates;
+    private final Collection<JLabel> dates;
+    private final JPanel existingDatesPanel;
+    private final JLabel prompt;
+    private final JTextField textField;
+    private final JButton confirm;
+    private final Font font = new Font("SansSerif", Font.PLAIN, 18);
 
     public SwitchDateFrame(RecoveryTraceApp recoveryTraceApp) {
         this.recoveryTraceApp = recoveryTraceApp;
-        this.existingDates = recoveryTraceApp.getRecoveryApp().getDailyLogMap().keySet();
-        this.dates = new ArrayList<>();
-        prompt = new JLabel("Please enter the date you would like to access in the form YYYY-MM-DD:");
-        prompt.setFont(font);
+        existingDates = recoveryTraceApp.getRecoveryApp().getDailyLogMap().keySet();
+        dates = new ArrayList<>();
 
+        existingDatesPanel = new JPanel();
+        existingDatesPanel.setLayout(new FlowLayout());
+
+        prompt = new JLabel("<html>Please enter the date you would like<br> to access in the form YYYY-MM-DD:</html>");
+        prompt.setFont(font);
         textField = new JTextField();
-        textField.setPreferredSize(new Dimension(200, 30));
+        textField.setText(recoveryTraceApp.getRecoveryApp().getActiveDate().toString());
 
         confirm = new JButton("Confirm");
         confirm.addActionListener(this);
 
         generateExistingDates();
+        setItemBounds();
         addItemsToFrame();
 
-        this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        this.setLayout(new FlowLayout());
+        this.setLayout(null);
         this.setResizable(false);
         this.pack();
         this.setVisible(true);
@@ -48,8 +53,29 @@ public class SwitchDateFrame extends JFrame implements ActionListener {
         for (LocalDate localDate : existingDates) {
             JLabel date = new JLabel(localDate.toString());
             date.setFont(font);
+            date.setBorder(BorderFactory.createEtchedBorder(EtchedBorder.LOWERED));
             dates.add(date);
         }
+    }
+
+    // MODIFIES:    this
+    // EFFECTS:     sets bounds for all items and frame
+    private void setItemBounds() {
+        int promptHeight = (int) prompt.getPreferredSize().getHeight();
+        int promptWidth = (int) prompt.getPreferredSize().getWidth();
+        int textFieldHeight = promptHeight;
+        int textFieldWidth = 100;
+        int buttonHeight = promptHeight;
+        int buttonWidth = 100;
+        int existingDatesPanelWidth = promptWidth + textFieldWidth + buttonWidth;
+        int existingDatesPanelHeight = 3 * promptHeight;
+
+        prompt.setBounds(0,0,promptWidth,promptHeight);
+        textField.setBounds(promptWidth,0,textFieldWidth, textFieldHeight);
+        confirm.setBounds(promptWidth + textFieldWidth, 0, buttonWidth, buttonHeight);
+        existingDatesPanel.setBounds(0, promptHeight, existingDatesPanelWidth, existingDatesPanelHeight);
+
+        this.setPreferredSize(new Dimension(existingDatesPanelWidth,existingDatesPanelHeight + promptHeight));
     }
 
     // MODIFIES:    this
@@ -59,28 +85,9 @@ public class SwitchDateFrame extends JFrame implements ActionListener {
         this.add(textField);
         this.add(confirm);
         for (JLabel label : dates) {
-            this.add(label);
+            existingDatesPanel.add(label);
         }
-    }
-
-    public LocalDate getLocalDate() throws NullPointerException {
-        if (selectedDate != null) {
-            return selectedDate;
-        }
-        throw new NullPointerException();
-    }
-
-    @Override
-    public void actionPerformed(ActionEvent e) {
-        if (e.getSource() == confirm) {
-            try {
-                verifyDate();
-            } catch (DateTimeParseException exc) {
-                invalidDateRecovery();
-            }
-        } else {
-            System.out.println("unhandled Action");
-        }
+        this.add(existingDatesPanel);
     }
 
     // MODIFIES:    this
@@ -111,6 +118,28 @@ public class SwitchDateFrame extends JFrame implements ActionListener {
     }
 
     // EFFECTS:     launches warning prompt that input date is invalid and for user to enter valid date
-    private void invalidDateRecovery() {
+    private void invalidDatePrompt() {
+        JOptionPane.showMessageDialog(null,
+                "please enter valid calender date in format YYYY-MM-DD",
+                "Error: Invalid Entry",
+                JOptionPane.ERROR_MESSAGE);
+    }
+
+    // MODIFIES:    this, recoveryTraceApp
+    // EFFECTS:     if valid date has been entered: closes frame and changes recoveryTraceApp to new date,
+    //              else it prompts user to enter valid date
+    @Override
+    public void actionPerformed(ActionEvent e) {
+        if (e.getSource() == confirm) {
+            try {
+                verifyDate();
+                recoveryTraceApp.switchDate(selectedDate);
+                this.dispose();
+            } catch (DateTimeParseException exc) {
+                invalidDatePrompt();
+            }
+        } else {
+            System.out.println("unhandled Action");
+        }
     }
 }

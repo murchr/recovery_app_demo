@@ -43,7 +43,7 @@ public class LogOptionPanel extends JPanel {
         this.add(addEntry);
         this.add(removeEntry);
         this.add(modifyEntry);
-        this.setSize(new Dimension(width, height));
+        //this.setSize(new Dimension(width, height));
         this.setPreferredSize(new Dimension(width, height));
     }
 }

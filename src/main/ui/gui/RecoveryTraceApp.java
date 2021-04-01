@@ -21,17 +21,18 @@ public class RecoveryTraceApp extends JFrame implements ActionListener {
     private JPanel recoveryAppOptions;
     private JButton changeDate;
     private JButton historyVisualize;
+    private JButton refreshButton;
     private DailyLogVisualization dailyLogVisualization;
 
-    private Font font = new Font("SansSerif", Font.BOLD, 22);
+    private final Font font = new Font("SansSerif", Font.BOLD, 22);
 
     private int titleHeight;
     private int dailyLogWidth;
     private int dailyLogHeight;
     private int optionsWidth;
 
-    private RecoveryApp recoveryApp;
-    private MemoryHandling memoryHandling;
+    private final RecoveryApp recoveryApp;
+    private final MemoryHandling memoryHandling;
 
     public RecoveryTraceApp(RecoveryApp recoveryApp, MemoryHandling memoryHandling) {
         this.recoveryApp = recoveryApp;
@@ -103,19 +104,24 @@ public class RecoveryTraceApp extends JFrame implements ActionListener {
         recoveryAppOptions = new JPanel();
         changeDate = new JButton();
         historyVisualize = new JButton();
+        refreshButton = new JButton();
 
         changeDate.setText("Change Date");
         historyVisualize.setText("Historical Visualization");
+        refreshButton.setText("Refresh RecoveryApp");
 
         changeDate.setFont(font);
         historyVisualize.setFont(font);
+        refreshButton.setFont(font);
 
         changeDate.addActionListener(this);
         historyVisualize.addActionListener(this);
+        refreshButton.addActionListener(this);
 
         recoveryAppOptions.setLayout(new GridLayout(5, 0));
         recoveryAppOptions.add(changeDate);
         recoveryAppOptions.add(historyVisualize);
+        recoveryAppOptions.add(refreshButton);
     }
 
     private void dailyLogSetup() {
@@ -162,12 +168,33 @@ public class RecoveryTraceApp extends JFrame implements ActionListener {
     // MODIFIES:    this
     // EFFECTS:     rebuilds RecoveryTraceApp updating output to that of active DailyLog
     private void rebuild() {
-        //!!! Stub
+        //dailyLogSetup();
+        //titleSetup();
+        //placeItems();
+        //this.getContentPane().setPreferredSize(
+        //        new Dimension(dailyLogWidth + optionsWidth, titleHeight + dailyLogHeight));
+        //this.setVisible(true);
+
+        //this.add(title);
+        //this.add(dailyLogVisualization);
+        //this.add(recoveryAppOptions);
+        //
+        //this.setBackground(Color.lightGray);
+        new RecoveryTraceApp(recoveryApp,memoryHandling);
+        this.dispose();
     }
+
+    private void clearFrame() {
+        this.removeAll();
+    }
+
 
     // EFFECTS:     Launches new window with tabs for various visualizations of data
     private void launchVisualizationWindow() {
-        // stub
+        JOptionPane.showMessageDialog(null,
+                "This feature is under development",
+                "Not Yet Implemented",
+                JOptionPane.WARNING_MESSAGE);
     }
 
     @Override
@@ -177,13 +204,17 @@ public class RecoveryTraceApp extends JFrame implements ActionListener {
         } else if (e.getSource() == saveRecoveryApp) {
             memoryHandling.saveRuntime();
         } else if (e.getSource() == saveAsRecoveryApp) {
-            //stub
+            JOptionPane.showMessageDialog(null,
+                    "This feature is under development",
+                    "Not Yet Implemented",
+                    JOptionPane.WARNING_MESSAGE);
         } else if (e.getSource() == changeDate) {
             launchSwitchDateFrame();
-            recoveryApp.print();
         } else if (e.getSource() == historyVisualize) {
             launchVisualizationWindow();
             recoveryApp.printMap();
+        } else if (e.getSource() == refreshButton) {
+            rebuild();
         } else {
             System.out.println("unhandled event");
         }

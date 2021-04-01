@@ -32,14 +32,12 @@ public class DailyLog implements Writable {
         return this.logDate;
     }
 
-    // EFFECT:  returns new instance of exerciseLog from DailyLog
     public ExerciseList getExerciseLog() {
-        return this.exerciseLog.clone();
+        return this.exerciseLog;
     }
 
-    // EFFECT:  returns new instance of exerciseLog from DailyLog
     public WeightList getWeightLog() {
-        return this.weightLog.clone();
+        return this.weightLog;
     }
 
     ///////////////////////
