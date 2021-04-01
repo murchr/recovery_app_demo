@@ -9,9 +9,7 @@ import ui.gui.DailyLogVisualization;
 import ui.gui.PanelSizes;
 import ui.gui.entries.ExerciseVisualization;
 import ui.gui.entries.WeightVisualization;
-import ui.gui.list.ExerciseListVisualization;
-import ui.gui.list.LogListPanel;
-import ui.gui.list.WeightListVisualization;
+import ui.gui.list.*;
 
 import javax.swing.*;
 import java.awt.*;
@@ -143,9 +141,6 @@ public class RecoveryTraceAppConsole extends JFrame {
             case "m":
                 memoryHandling();
                 break;
-            case "c":
-                clearFrame();
-                break;
             default:
                 System.out.println("Selection not valid");
                 break;
@@ -166,25 +161,41 @@ public class RecoveryTraceAppConsole extends JFrame {
             case "t":
                 totalExerciseOn();
                 break;
-            case "e":
-                recoveryApp.printExercise();
-                //launchFrame(new ExerciseListVisualization(recoveryApp.getDailyLog().getExerciseLog()));
-                launchFrame(new
-                        LogListPanel("Exercise Log",
-                        new ExerciseListVisualization(recoveryApp.getDailyLog().getExerciseLog())));
-                break;
             case "a":
                 averageWeight();
                 break;
-            case "w":
-                recoveryApp.printWeight();
-                //launchFrame(new WeightListVisualization(recoveryApp.getDailyLog().getWeightLog()));
-                launchFrame(new
-                        LogListPanel("Weight Log",
-                        new WeightListVisualization(recoveryApp.getDailyLog().getWeightLog())));
-                break;
             case "p":
                 recoveryApp.printMap();
+                break;
+            case "g":
+                guiOptions();
+            default:
+                System.out.println("Selection not valid");
+                break;
+        }
+        System.out.println("\n");
+    }
+
+    private void guiOptions() {
+        displayOptions.displayGuiMenu();
+        String command = input.next();
+        command = command.toLowerCase();
+        processGuiOptions(command);
+    }
+
+    private void processGuiOptions(String command) {
+        switch (command) {
+            case "e":
+                recoveryApp.printExercise();
+                launchFrame(new ExerciseListPanel("Exercise Log", new ExerciseListVisualization(
+                        recoveryApp.getDailyLog().getExerciseLog()), recoveryApp.getDailyLog().getExerciseLog()));
+                break;
+            case "w":
+                recoveryApp.printWeight();
+                launchFrame(new
+                        WeightListPanel("Weight Log",
+                        new WeightListVisualization(recoveryApp.getDailyLog().getWeightLog()),
+                        recoveryApp.getDailyLog().getWeightLog()));
                 break;
             case "d":
                 launchFrame(new DailyLogVisualization(recoveryApp.getDailyLog()));
@@ -193,7 +204,6 @@ public class RecoveryTraceAppConsole extends JFrame {
                 System.out.println("Selection not valid");
                 break;
         }
-        System.out.println("\n");
     }
 
     private void memoryHandling() {
@@ -363,14 +373,6 @@ public class RecoveryTraceAppConsole extends JFrame {
         } catch (IOException e) {
             System.out.println("Unable to read from file: " + memoryHandling.getRecoveryAddress());
         }
-    }
-
-    private void clearFrame() {
-        testFrame.dispose();
-        testFrame.removeAll();
-        testFrame.pack();
-        testFrame.setVisible(true);
-        //launchFrame(null);
     }
 
     private void launchFrame(JPanel panel) {
