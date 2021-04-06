@@ -1,7 +1,7 @@
 package ui.gui;
 
-import ui.MemoryHandling;
-import ui.RecoveryApp;
+import persistence.MemoryHandling;
+import model.RecoveryApp;
 
 import javax.swing.*;
 import java.awt.*;
@@ -11,7 +11,7 @@ import java.io.File;
 import java.io.IOException;
 import java.time.LocalDate;
 
-public class RecoveryTraceApp extends JFrame implements ActionListener {
+public class RecoveryAppGUI extends JFrame implements ActionListener {
     private JMenuBar menuBar;
     private JMenu fileMenu;
     private JMenuItem loadRecoveryApp;
@@ -22,7 +22,7 @@ public class RecoveryTraceApp extends JFrame implements ActionListener {
     private JButton changeDate;
     private JButton historyVisualize;
     private JButton refreshButton;
-    private DailyLogVisualization dailyLogVisualization;
+    private DailyLogPanel dailyLogPanel;
 
     private final Font font = new Font("SansSerif", Font.BOLD, 22);
 
@@ -34,7 +34,7 @@ public class RecoveryTraceApp extends JFrame implements ActionListener {
     private final RecoveryApp recoveryApp;
     private final MemoryHandling memoryHandling;
 
-    public RecoveryTraceApp(RecoveryApp recoveryApp, MemoryHandling memoryHandling) {
+    public RecoveryAppGUI(RecoveryApp recoveryApp, MemoryHandling memoryHandling) {
         this.recoveryApp = recoveryApp;
         this.memoryHandling = memoryHandling;
 
@@ -51,7 +51,7 @@ public class RecoveryTraceApp extends JFrame implements ActionListener {
         this.setVisible(true);
 
         this.add(title);
-        this.add(dailyLogVisualization);
+        this.add(dailyLogPanel);
         this.add(recoveryAppOptions);
         this.pack();
         this.setBackground(Color.lightGray);
@@ -67,14 +67,14 @@ public class RecoveryTraceApp extends JFrame implements ActionListener {
 
     private void placeItems() {
         titleHeight = (int) title.getPreferredSize().getHeight();
-        dailyLogWidth = (int) dailyLogVisualization.getPreferredSize().getHeight();
-        dailyLogHeight = (int) dailyLogVisualization.getPreferredSize().getHeight();
+        dailyLogWidth = (int) dailyLogPanel.getPreferredSize().getHeight();
+        dailyLogHeight = (int) dailyLogPanel.getPreferredSize().getHeight();
         optionsWidth = (int) recoveryAppOptions.getPreferredSize().getWidth();
 
         title.setBounds(0, 0,
                 dailyLogWidth,
                 titleHeight);
-        dailyLogVisualization.setBounds(0, 22, dailyLogWidth, dailyLogHeight);
+        dailyLogPanel.setBounds(0, 22, dailyLogWidth, dailyLogHeight);
         recoveryAppOptions.setBounds(dailyLogWidth, 0,
                 (int) recoveryAppOptions.getPreferredSize().getWidth(),
                 dailyLogHeight + titleHeight);
@@ -125,7 +125,7 @@ public class RecoveryTraceApp extends JFrame implements ActionListener {
     }
 
     private void dailyLogSetup() {
-        dailyLogVisualization = new DailyLogVisualization(recoveryApp.getDailyLog());
+        dailyLogPanel = new DailyLogPanel(recoveryApp.getDailyLog());
     }
 
     private void titleSetup() {
@@ -180,7 +180,7 @@ public class RecoveryTraceApp extends JFrame implements ActionListener {
         //this.add(recoveryAppOptions);
         //
         //this.setBackground(Color.lightGray);
-        new RecoveryTraceApp(recoveryApp,memoryHandling);
+        new RecoveryAppGUI(recoveryApp,memoryHandling);
         this.dispose();
     }
 

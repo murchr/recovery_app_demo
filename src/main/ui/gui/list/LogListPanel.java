@@ -10,7 +10,7 @@ import java.awt.event.ActionListener;
 
 public abstract class LogListPanel extends JPanel implements ActionListener {
     protected JLabel name;
-    private LogListVisualization logListVisualization;
+    private LogListVis logListVis;
     private LogOptionPanel buttonPanel;
     protected JButton addEntry;
     protected JButton removeEntry;
@@ -20,8 +20,8 @@ public abstract class LogListPanel extends JPanel implements ActionListener {
     protected Font font = new Font("SansSerif", Font.PLAIN, 18);
     protected int currID = 1;
 
-    public LogListPanel(String listType, LogListVisualization logListVisualization, LogList logList) {
-        this.logListVisualization = logListVisualization;
+    public LogListPanel(String listType, LogListVis logListVis, LogList logList) {
+        this.logListVis = logListVis;
         this.logList = logList;
         // sets new minimum entry id
         for (LogEntry logEntry : logList) {
@@ -38,37 +38,37 @@ public abstract class LogListPanel extends JPanel implements ActionListener {
 
         defineItemBounds();
 
-        this.setPreferredSize(new Dimension((int) this.logListVisualization.getPreferredSize().getWidth()
+        this.setPreferredSize(new Dimension((int) this.logListVis.getPreferredSize().getWidth()
                 + (int) buttonPanel.getPreferredSize().getWidth(),
-                (int) (this.logListVisualization.getPreferredSize().getHeight()
+                (int) (this.logListVis.getPreferredSize().getHeight()
                         + name.getPreferredSize().getHeight())));
 
         this.setBackground(Color.white);
         this.setLayout(null);
         this.add(name);
-        this.add(this.logListVisualization);
+        this.add(this.logListVis);
         this.add(buttonPanel);
     }
 
     private void defineItemBounds() {
-        int logListPanelHeight = (int) logListVisualization.getPreferredSize().getHeight();
+        int logListPanelHeight = (int) logListVis.getPreferredSize().getHeight();
         int buttonPanelHeight = (int) buttonPanel.getPreferredSize().getHeight();
         int nameHeight = (int) name.getPreferredSize().getHeight();
         name.setBounds(0, 0,
-                (int) logListVisualization.getPreferredSize().getWidth(),
+                (int) logListVis.getPreferredSize().getWidth(),
                 nameHeight);
         if ((logListPanelHeight + nameHeight) >= buttonPanelHeight) {
-            logListVisualization.setBounds(0, (int) name.getPreferredSize().getHeight(),
-                    (int) logListVisualization.getPreferredSize().getWidth(),
+            logListVis.setBounds(0, (int) name.getPreferredSize().getHeight(),
+                    (int) logListVis.getPreferredSize().getWidth(),
                     logListPanelHeight);
-            buttonPanel.setBounds((int) logListVisualization.getPreferredSize().getWidth(), 0,
+            buttonPanel.setBounds((int) logListVis.getPreferredSize().getWidth(), 0,
                     (int) buttonPanel.getPreferredSize().getWidth(),
                     (int) (logListPanelHeight + name.getPreferredSize().getHeight()));
         } else {
-            logListVisualization.setBounds(0, (int) name.getPreferredSize().getHeight(),
-                    (int) logListVisualization.getPreferredSize().getWidth(),
+            logListVis.setBounds(0, (int) name.getPreferredSize().getHeight(),
+                    (int) logListVis.getPreferredSize().getWidth(),
                     buttonPanelHeight);
-            buttonPanel.setBounds((int) logListVisualization.getPreferredSize().getWidth(), 0,
+            buttonPanel.setBounds((int) logListVis.getPreferredSize().getWidth(), 0,
                     (int) buttonPanel.getPreferredSize().getWidth(),
                     buttonPanelHeight + nameHeight);
         }

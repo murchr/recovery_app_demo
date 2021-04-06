@@ -1,12 +1,8 @@
-package ui;
+package model;
 
-import model.DailyLog;
-import model.DailyLogMap;
 import model.entries.ExerciseEntry;
 import model.entries.LogEntry;
 import model.entries.WeightEntry;
-import model.lists.ExerciseList;
-import model.lists.WeightList;
 
 import java.time.LocalDate;
 import java.util.Collection;

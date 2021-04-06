@@ -1,4 +1,4 @@
-package ui.gui.entries;
+package ui.gui.newentry;
 
 import exceptions.OutOfRange;
 import model.entries.LogEntry;

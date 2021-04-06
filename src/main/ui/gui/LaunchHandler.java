@@ -1,7 +1,7 @@
 package ui.gui;
 
-import ui.MemoryHandling;
-import ui.RecoveryApp;
+import persistence.MemoryHandling;
+import model.RecoveryApp;
 
 import javax.swing.*;
 import java.awt.*;
@@ -101,7 +101,7 @@ public class LaunchHandler extends JFrame implements ActionListener {
                 System.out.println("unhandled event");
             }
 
-            new RecoveryTraceApp(recoveryApp, memoryHandling);
+            new RecoveryAppGUI(recoveryApp, memoryHandling);
 
         } catch (IOException exc) {
             System.out.println("Unable to read from file: "

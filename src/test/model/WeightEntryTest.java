@@ -7,7 +7,7 @@ import org.junit.jupiter.api.Test;
 
 import java.time.LocalTime;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.*;
 
 public class WeightEntryTest {
 
@@ -25,6 +25,40 @@ public class WeightEntryTest {
             w3 = new WeightEntry(3, t3, 200);
         } catch (OutOfRange e) {
             // all inputs valid
+        }
+    }
+
+    @Test
+    public void testConstructorTooLight() {
+        try {
+            new WeightEntry(1, t1, 0);
+            fail();
+        } catch (OutOfRange e) {
+            // expected fail
+        }
+
+        try {
+            new WeightEntry(1, t1, -1);
+            fail();
+        } catch (OutOfRange e) {
+            // expected fail
+        }
+
+        try {
+            new WeightEntry(1, t1, -120);
+            fail();
+        } catch (OutOfRange e) {
+            // expected fail
+        }
+    }
+
+    @Test
+    public void testConstructorEdgeCase() {
+        try {
+            new WeightEntry(1, t1,1);
+            new WeightEntry(1, t1,1000);
+        } catch (OutOfRange e) {
+            fail();
         }
     }
 

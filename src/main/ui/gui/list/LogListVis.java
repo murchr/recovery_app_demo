@@ -1,19 +1,19 @@
 package ui.gui.list;
 
 import ui.gui.PanelSizes;
-import ui.gui.entries.EntryVisualization;
+import ui.gui.entries.EntryVis;
 
 import javax.swing.*;
 import java.awt.*;
 import java.util.ArrayList;
 
-public abstract class LogListVisualization extends JPanel {
+public abstract class LogListVis extends JPanel {
     protected final int width = PanelSizes.LOG_LIST.getWidth();
     protected int height = PanelSizes.LOG_LIST.getHeight();
     protected int entries = 0;
-    protected ArrayList<EntryVisualization> visualizationEntries;
+    protected ArrayList<EntryVis> visualizationEntries;
 
-    public LogListVisualization() {
+    public LogListVis() {
         this.setLayout(new FlowLayout());
         this.setVisible(true);
         this.setPreferredSize(new Dimension(width, height));
@@ -27,7 +27,7 @@ public abstract class LogListVisualization extends JPanel {
         this.removeAll();
         height = PanelSizes.LOG_LIST.getHeight();
 
-        for (EntryVisualization ev : visualizationEntries) {
+        for (EntryVis ev : visualizationEntries) {
             this.add(ev);
             height += ev.getPreferredSize().getHeight();
         }
@@ -45,13 +45,13 @@ public abstract class LogListVisualization extends JPanel {
 
     // MODIFIES: this
     // EFFECTS: adds new item to list of entries
-    public abstract void addEntry(EntryVisualization ev);
+    public abstract void addEntry(EntryVis ev);
 
     // MODIFIES: this
     // EFFECTS: removes item from list of entries
-    public abstract void removeEntry(EntryVisualization ev);
+    public abstract void removeEntry(EntryVis ev);
 
     // MODIFIES: this
     // EFFECTS: adds new item to list of entries
-    public abstract void modifyEntry(EntryVisualization ev);
+    public abstract void modifyEntry(EntryVis ev);
 }

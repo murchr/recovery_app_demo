@@ -1,4 +1,4 @@
-package ui.gui.entries;
+package ui.gui.newentry;
 
 import model.entries.LogEntry;
 import model.lists.LogList;

@@ -3,12 +3,11 @@ package ui.console;
 import exceptions.OutOfRange;
 import model.entries.ExerciseEntry;
 import model.entries.WeightEntry;
-import ui.MemoryHandling;
-import ui.RecoveryApp;
-import ui.gui.DailyLogVisualization;
-import ui.gui.PanelSizes;
-import ui.gui.entries.ExerciseVisualization;
-import ui.gui.entries.WeightVisualization;
+import persistence.MemoryHandling;
+import model.RecoveryApp;
+import ui.gui.DailyLogPanel;
+import ui.gui.entries.ExerciseVis;
+import ui.gui.entries.WeightVis;
 import ui.gui.list.*;
 
 import javax.swing.*;
@@ -19,7 +18,7 @@ import java.time.LocalDate;
 import java.time.format.DateTimeParseException;
 import java.util.Scanner;
 
-public class RecoveryTraceAppConsole extends JFrame {
+public class RecoveryAppConsole extends JFrame {
     private Scanner input;
 
     private DisplayOptions displayOptions;
@@ -30,7 +29,7 @@ public class RecoveryTraceAppConsole extends JFrame {
     private JFrame testFrame;
 
     // EFFECTS: runs the RecoveryTraceApp
-    public RecoveryTraceAppConsole() {
+    public RecoveryAppConsole() {
         String startCommand;
         displayOptions = new DisplayOptions();
         recoveryApp = new RecoveryApp();
@@ -187,18 +186,18 @@ public class RecoveryTraceAppConsole extends JFrame {
         switch (command) {
             case "e":
                 recoveryApp.printExercise();
-                launchFrame(new ExerciseListPanel("Exercise Log", new ExerciseListVisualization(
+                launchFrame(new ExerciseListPanel("Exercise Log", new ExerciseListVis(
                         recoveryApp.getDailyLog().getExerciseLog()), recoveryApp.getDailyLog().getExerciseLog()));
                 break;
             case "w":
                 recoveryApp.printWeight();
                 launchFrame(new
                         WeightListPanel("Weight Log",
-                        new WeightListVisualization(recoveryApp.getDailyLog().getWeightLog()),
+                        new WeightListVis(recoveryApp.getDailyLog().getWeightLog()),
                         recoveryApp.getDailyLog().getWeightLog()));
                 break;
             case "d":
-                launchFrame(new DailyLogVisualization(recoveryApp.getDailyLog()));
+                launchFrame(new DailyLogPanel(recoveryApp.getDailyLog()));
                 break;
             default:
                 System.out.println("Selection not valid");
@@ -267,7 +266,7 @@ public class RecoveryTraceAppConsole extends JFrame {
             duration = Integer.parseInt(input.next());
 
             recoveryApp.getDailyLog().logNewExercise(new ExerciseEntry(id, type, intensity, duration));
-            launchFrame(new ExerciseVisualization(new ExerciseEntry(id, type, intensity, duration)));
+            launchFrame(new ExerciseVis(new ExerciseEntry(id, type, intensity, duration)));
         } catch (NumberFormatException e) {
             System.out.println("Input could not be parsed into correct data type");
         } catch (OutOfRange e) {
@@ -288,7 +287,7 @@ public class RecoveryTraceAppConsole extends JFrame {
             weight = Double.parseDouble(input.next());
 
             recoveryApp.getDailyLog().logNewWeight(new WeightEntry(id, weight));
-            launchFrame(new WeightVisualization(new WeightEntry(id, weight)));
+            launchFrame(new WeightVis(new WeightEntry(id, weight)));
         } catch (NumberFormatException e) {
             System.out.println("Input could not be parsed into correct data type");
         } catch (OutOfRange e) {

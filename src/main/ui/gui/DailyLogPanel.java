@@ -8,12 +8,12 @@ import java.awt.*;
 import java.time.LocalDate;
 import java.util.ArrayList;
 
-public class DailyLogVisualization extends JPanel {
+public class DailyLogPanel extends JPanel {
     private DailyLog dailyLog;
     private LocalDate localDate;
     private Font font = new Font("SansSerif", Font.PLAIN, 18);
-    private LogListPanel exerciseLog;
-    private LogListPanel weightLog;
+    private ExerciseListPanel exerciseLog;
+    private WeightListPanel weightLog;
     private JLabel time;
     private ArrayList<Container> items = new ArrayList<>();
 
@@ -22,7 +22,7 @@ public class DailyLogVisualization extends JPanel {
     private int bottomItemBase = 0;
 
 
-    public DailyLogVisualization(DailyLog dailyLog) {
+    public DailyLogPanel(DailyLog dailyLog) {
         this.dailyLog = dailyLog;
         this.localDate = dailyLog.getLogDate();
 
@@ -48,9 +48,9 @@ public class DailyLogVisualization extends JPanel {
         time.setFont(font);
 
         exerciseLog = new ExerciseListPanel("Exercise Log",
-                new ExerciseListVisualization(dailyLog.getExerciseLog()), dailyLog.getExerciseLog());
+                new ExerciseListVis(dailyLog.getExerciseLog()), dailyLog.getExerciseLog());
         weightLog = new WeightListPanel("Weight Log",
-                new WeightListVisualization(dailyLog.getWeightLog()), dailyLog.getWeightLog());
+                new WeightListVis(dailyLog.getWeightLog()), dailyLog.getWeightLog());
     }
 
     private void defineItemsBounds() {

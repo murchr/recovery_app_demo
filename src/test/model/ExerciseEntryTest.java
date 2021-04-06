@@ -30,6 +30,70 @@ public class ExerciseEntryTest {
     }
 
     @Test
+    public void testConstructorTooLowIntensity() {
+        try {
+            new ExerciseEntry(1,t1,"exercise1",0,20);
+            fail();
+        } catch (OutOfRange e) {
+            // expected out of range
+        }
+
+        try {
+            new ExerciseEntry(1,t1,"exercise1",-3,20);
+            fail();
+        } catch (OutOfRange e) {
+            // expected out of range
+        }
+    }
+
+    @Test
+    public void testConstructorTooHighIntensity() {
+        try {
+            new ExerciseEntry(1,t1,"exercise1",11,20);
+            fail();
+        } catch (OutOfRange e) {
+            // expected out of range
+        }
+
+        try {
+            new ExerciseEntry(1,t1,"exercise1",15,20);
+            fail();
+        } catch (OutOfRange e) {
+            // expected out of range
+        }
+    }
+
+    @Test
+    public void testConstructorLowDuration() {
+        try {
+            new ExerciseEntry(1,t1,"exercise1",5,0);
+            fail();
+        } catch (OutOfRange e) {
+            // expected out of range
+        }
+
+        try {
+            new ExerciseEntry(1,t1,"exercise1",5,-15);
+            fail();
+        } catch (OutOfRange e) {
+            // expected out of range
+        }
+    }
+
+    @Test
+    public void testConstructorEdgeCases() {
+        try {
+            new ExerciseEntry(1,t1,"exercise1",5,1);
+            new ExerciseEntry(1,t1,"exercise1",1,50);
+            new ExerciseEntry(1,t1,"exercise1",10,50);
+            new ExerciseEntry(1,t1,"exercise1",1,1);
+            new ExerciseEntry(1,t1,"exercise1",10,1);
+        } catch (OutOfRange e) {
+            fail();
+        }
+    }
+
+    @Test
     public void testSetTime() {
         // set to same time
         e3.setTime(t3);

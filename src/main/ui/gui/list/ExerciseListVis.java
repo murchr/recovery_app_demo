@@ -3,18 +3,18 @@ package ui.gui.list;
 import model.entries.ExerciseEntry;
 import model.entries.LogEntry;
 import model.lists.ExerciseList;
-import ui.gui.entries.EntryVisualization;
-import ui.gui.entries.ExerciseVisualization;
+import ui.gui.entries.EntryVis;
+import ui.gui.entries.ExerciseVis;
 
 import java.awt.*;
 
-public class ExerciseListVisualization extends LogListVisualization {
+public class ExerciseListVis extends LogListVis {
 
-    public ExerciseListVisualization(ExerciseList exerciseList) {
+    public ExerciseListVis(ExerciseList exerciseList) {
         super();
 
         for (LogEntry exerciseEntry : exerciseList) {
-            ExerciseVisualization ev = new ExerciseVisualization((ExerciseEntry) exerciseEntry);
+            ExerciseVis ev = new ExerciseVis((ExerciseEntry) exerciseEntry);
             visualizationEntries.add(ev);
             height += ev.getHeight();
             entries++;
@@ -25,19 +25,19 @@ public class ExerciseListVisualization extends LogListVisualization {
     }
 
     @Override
-    public void addEntry(EntryVisualization ev) {
+    public void addEntry(EntryVis ev) {
         // stub
         entries++;
     }
 
     @Override
-    public void removeEntry(EntryVisualization ev) {
+    public void removeEntry(EntryVis ev) {
         // stub
         entries--;
     }
 
     @Override
-    public void modifyEntry(EntryVisualization ev) {
+    public void modifyEntry(EntryVis ev) {
         // stub
     }
 }

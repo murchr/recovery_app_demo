@@ -1,17 +1,16 @@
 package ui.gui.list;
 
-import model.lists.ExerciseList;
 import model.lists.LogList;
 import model.lists.WeightList;
-import ui.gui.entries.NewWeightFrame;
+import ui.gui.newentry.NewWeightFrame;
 
 import javax.swing.*;
 
 public class WeightListPanel extends LogListPanel {
     JLabel summaryStat;
 
-    public WeightListPanel(String listType, LogListVisualization logListVisualization, LogList logList) {
-        super(listType, logListVisualization, logList);
+    public WeightListPanel(String listType, LogListVis logListVis, LogList logList) {
+        super(listType, logListVis, logList);
     }
 
     @Override

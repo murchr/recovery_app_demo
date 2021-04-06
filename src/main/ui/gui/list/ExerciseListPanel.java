@@ -2,15 +2,15 @@ package ui.gui.list;
 
 import model.lists.ExerciseList;
 import model.lists.LogList;
-import ui.gui.entries.NewExerciseFrame;
+import ui.gui.newentry.NewExerciseFrame;
 
 import javax.swing.*;
 
 public class ExerciseListPanel extends LogListPanel {
     JLabel summaryStat;
 
-    public ExerciseListPanel(String listType, LogListVisualization logListVisualization, LogList logList) {
-        super(listType, logListVisualization, logList);
+    public ExerciseListPanel(String listType, LogListVis logListVis, LogList logList) {
+        super(listType, logListVis, logList);
     }
 
     @Override

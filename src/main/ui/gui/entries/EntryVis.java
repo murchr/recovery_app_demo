@@ -7,7 +7,7 @@ import javax.swing.*;
 import javax.swing.border.EtchedBorder;
 import java.awt.*;
 
-public abstract class EntryVisualization extends JPanel {
+public abstract class EntryVis extends JPanel {
     protected Font font = new Font("SansSerif", Font.PLAIN, 18);
     protected JLabel time;
     protected int heightPerEntry = 20;
@@ -15,7 +15,7 @@ public abstract class EntryVisualization extends JPanel {
     protected int height = heightPerEntry;
     protected int entries = 1;
 
-    public EntryVisualization(LogEntry logEntry) {
+    public EntryVis(LogEntry logEntry) {
         this.time = new JLabel();
         time.setText(String.format("Time: \t %02d:%02d", logEntry.getTime().getHour(), logEntry.getTime().getMinute()));
         time.setFont(font);

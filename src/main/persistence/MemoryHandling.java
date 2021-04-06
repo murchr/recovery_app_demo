@@ -1,7 +1,7 @@
-package ui;
+package persistence;
 
 import model.DailyLogMap;
-import persistence.*;
+import model.RecoveryApp;
 
 import java.io.File;
 import java.io.FileNotFoundException;

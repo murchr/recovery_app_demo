@@ -39,3 +39,24 @@ professionals to review relevant data to patient treatment
 - As a user, I want to be able to load an instance of the last accessed instance of DailyLogMap
 - As a user, I want to be able to add DailyLog entries from a file to runtime DailyLogMap
 - As a user, I want to be able to save my DailyLogMap to a file.
+
+## Phase 4: Task 2
+
+- As a user, I want creation of new LogEntries to be robust against invalid input.
+ExerciseEntry/WeightEntry constructors
+- gui implementation of a type hierarchy with abstract class NewEntryFrame and subclasses
+NewExerciseFrame/NewWeightFrame. Overwritten class: storeEntries(), initializeItems(), initializeItems(Log Entry)
+
+## Phase 4: Task 3
+
+- As is apparent in the diagram the project is designed such that additional features data
+fields can be added to the app by adding it as a field to DailyLog/DailyLogPanel and generating
+appropriate subclasses of logEntry, LogList, SummaryStat, EntryVis, LogListVis, and LogListPanel.
+- The structure for the RecoveryApp for the most part is clean however if given more time the structure
+of DailyLogMap and LogList should be refactored to encapsulate rather than extend the Java ConcurrentSkipListMap
+and ArrayList classes respectively. Additionally, further refactoring should be executed to divide MemoryHandling
+into classes to handle Addresses and RecoveryApp independently.
+- The structure for the RecoveryAppUI would benefit from altering passing of the RecoveryApp data within the
+RecoveryAppGui and down its class structure. Next, refactoring the LogListPanel, LogOptionPanel, and
+LogListVis into a single class structure may be more coherent in reducing the split of closely related 
+functionality.

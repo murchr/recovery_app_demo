@@ -5,10 +5,10 @@ import model.entries.WeightEntry;
 import javax.swing.*;
 import java.awt.*;
 
-public class WeightVisualization extends EntryVisualization {
+public class WeightVis extends EntryVis {
     private JLabel weight;
 
-    public WeightVisualization(WeightEntry weightEntry) {
+    public WeightVis(WeightEntry weightEntry) {
         super(weightEntry);
         weight = new JLabel();
         JLabel[] labels = {weight};

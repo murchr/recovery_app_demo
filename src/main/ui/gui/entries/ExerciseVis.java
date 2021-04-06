@@ -5,12 +5,12 @@ import model.entries.ExerciseEntry;
 import javax.swing.*;
 import java.awt.*;
 
-public class ExerciseVisualization extends EntryVisualization {
+public class ExerciseVis extends EntryVis {
     private JLabel type;
     private JLabel duration;
     private JLabel intensity;
 
-    public ExerciseVisualization(ExerciseEntry exerciseEntry) {
+    public ExerciseVis(ExerciseEntry exerciseEntry) {
         super(exerciseEntry);
         type = new JLabel();
         duration = new JLabel();

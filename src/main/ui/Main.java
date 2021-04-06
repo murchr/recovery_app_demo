@@ -1,6 +1,5 @@
 package ui;
 
-import ui.console.RecoveryTraceAppConsole;
 import ui.gui.LaunchHandler;
 
 public class Main {

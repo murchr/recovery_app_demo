@@ -257,12 +257,42 @@
                     "entryId": 4
                 }
             ]
+        },
+        {
+            "date": {
+                "month": 3,
+                "year": 2022,
+                "day": 7
+            },
+            "exerciseLog": [
+                {
+                    "intensity": 8,
+                    "duration": 275,
+                    "entryTime": {
+                        "hour": 11,
+                        "minute": 25
+                    },
+                    "exerciseType": "Hiking",
+                    "entryId": 1
+                },
+                {
+                    "intensity": 3,
+                    "duration": 60,
+                    "entryTime": {
+                        "hour": 11,
+                        "minute": 26
+                    },
+                    "exerciseType": "Swimming",
+                    "entryId": 2
+                }
+            ],
+            "weightLog": []
         }
     ],
     "activeDate": {
-        "month": 4,
-        "year": 2021,
-        "day": 5
+        "month": 3,
+        "year": 2022,
+        "day": 7
     },
     "user": "Ryan Murch"
 }

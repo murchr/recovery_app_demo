@@ -12,7 +12,7 @@ import java.util.Collection;
 
 public class SwitchDateFrame extends JFrame implements ActionListener {
     private LocalDate selectedDate;
-    private final RecoveryTraceApp recoveryTraceApp;
+    private final RecoveryAppGUI recoveryAppGUI;
     private final Collection<LocalDate> existingDates;
     private final Collection<JLabel> dates;
     private final JPanel existingDatesPanel;
@@ -21,9 +21,9 @@ public class SwitchDateFrame extends JFrame implements ActionListener {
     private final JButton confirm;
     private final Font font = new Font("SansSerif", Font.PLAIN, 18);
 
-    public SwitchDateFrame(RecoveryTraceApp recoveryTraceApp) {
-        this.recoveryTraceApp = recoveryTraceApp;
-        existingDates = recoveryTraceApp.getRecoveryApp().getDailyLogMap().keySet();
+    public SwitchDateFrame(RecoveryAppGUI recoveryAppGUI) {
+        this.recoveryAppGUI = recoveryAppGUI;
+        existingDates = recoveryAppGUI.getRecoveryApp().getDailyLogMap().keySet();
         dates = new ArrayList<>();
 
         existingDatesPanel = new JPanel();
@@ -32,7 +32,7 @@ public class SwitchDateFrame extends JFrame implements ActionListener {
         prompt = new JLabel("<html>Please enter the date you would like<br> to access in the form YYYY-MM-DD:</html>");
         prompt.setFont(font);
         textField = new JTextField();
-        textField.setText(recoveryTraceApp.getRecoveryApp().getActiveDate().toString());
+        textField.setText(recoveryAppGUI.getRecoveryApp().getActiveDate().toString());
 
         confirm = new JButton("Confirm");
         confirm.addActionListener(this);
@@ -133,7 +133,7 @@ public class SwitchDateFrame extends JFrame implements ActionListener {
         if (e.getSource() == confirm) {
             try {
                 verifyDate();
-                recoveryTraceApp.switchDate(selectedDate);
+                recoveryAppGUI.switchDate(selectedDate);
                 this.dispose();
             } catch (DateTimeParseException exc) {
                 invalidDatePrompt();

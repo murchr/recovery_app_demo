@@ -3,19 +3,18 @@ package ui.gui.list;
 import model.entries.LogEntry;
 import model.entries.WeightEntry;
 import model.lists.WeightList;
-import ui.gui.entries.EntryVisualization;
-import ui.gui.entries.WeightVisualization;
+import ui.gui.entries.EntryVis;
+import ui.gui.entries.WeightVis;
 
-import javax.swing.*;
 import java.awt.*;
 
-public class WeightListVisualization extends LogListVisualization {
+public class WeightListVis extends LogListVis {
 
-    public WeightListVisualization(WeightList weightList) {
+    public WeightListVis(WeightList weightList) {
         super();
 
         for (LogEntry weightEntry : weightList) {
-            WeightVisualization wv = new WeightVisualization((WeightEntry) weightEntry);
+            WeightVis wv = new WeightVis((WeightEntry) weightEntry);
             visualizationEntries.add(wv);
             height += wv.getHeight();
             entries++;
@@ -26,19 +25,19 @@ public class WeightListVisualization extends LogListVisualization {
     }
 
     @Override
-    public void addEntry(EntryVisualization ev) {
+    public void addEntry(EntryVis ev) {
         // stub
         entries++;
     }
 
     @Override
-    public void removeEntry(EntryVisualization ev) {
+    public void removeEntry(EntryVis ev) {
         // stub
         entries--;
     }
 
     @Override
-    public void modifyEntry(EntryVisualization ev) {
+    public void modifyEntry(EntryVis ev) {
         // stub
     }
 }
